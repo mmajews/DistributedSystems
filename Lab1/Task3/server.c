@@ -113,6 +113,13 @@ int main(int argc, char *argv[]) {
 }
 
 void handleInternet(struct msg msg1, struct sockaddr_in other) {
+    long calculatedHash = getHashFromStruct(&msg1);
+    if (calculatedHash != msg1.controlSum) {
+        printf("Calculated: %ld, in message: %ld \n", calculatedHash, msg1.controlSum);
+        printf("Calculated control sum is not correct. Corrupted message. Aborting...\n");
+        return;
+    }
+
     if (checkIfRegistered(msg1.nick) == 0) {
         printf("User %s not registered!\n", msg1.nick);
         if (strncmp(msg1.buf, "%R%", 3) != 0) {

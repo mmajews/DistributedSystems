@@ -98,6 +98,11 @@ void writer(void *ptr) {
 
     //Register User
     strcpy(msg1.buf, "%R%");
+    char output[TIME_LENGTH];
+    getCurrentTime(output);
+    strcpy(msg1.time, output);
+    msg1.controlSum = getHashFromStruct(&msg1);
+    printf("Calculated control sum for message \n : %ld", msg1.controlSum);
     if (sendto(socketInternet, (void *) &msg1, sizeof(struct msg), 0, (struct sockaddr *) &server,
                sizeof(struct sockaddr_in)) == -1) {
         perror("sendto()");
@@ -105,11 +110,12 @@ void writer(void *ptr) {
     }
 
     while (1) {
+        memset(output, '\0', sizeof(output));
         fgets(msg1.buf, 256, stdin);
-        char output[TIME_LENGTH];
         getCurrentTime(output);
         strcpy(msg1.time, output);
-        printf("Current time %s",output);
+        msg1.controlSum = getHashFromStruct(&msg1);
+
         if (sendto(socketInternet, (void *) &msg1, sizeof(struct msg), 0, (struct sockaddr *) &server,
                    sizeof(struct sockaddr_in)) == -1) {
             perror("sendto()");
@@ -132,6 +138,7 @@ void receiver(void *ptr) {
         if (strcmp(msg1.nick, nick) == 0) {
             continue;
         }
+        printf("Time:%s\n", msg1.time);
         printf("Nick:%s\tMessage:%s\n", msg1.nick, msg1.buf);
     }
 }

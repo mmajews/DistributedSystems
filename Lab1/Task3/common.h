@@ -22,3 +22,18 @@ struct clientProfile
     int type;
     int sock;
 };
+
+long getHashFromStruct(struct msg *toBeHashed) {
+    long hash = 0;
+    hash += toBeHashed->sock;
+    for (int i = 0; i < MAX_NICK_LENGTH; i++) {
+        hash += toBeHashed->nick[i];
+    }
+    for (int i = 0; i < MAX_MESSAGE_LENGTH; i++) {
+        hash += toBeHashed->buf[i];
+    }
+    for (int i = 0; i < TIME_LENGTH; i++) {
+        hash += toBeHashed->time[i];
+    }
+    return hash;
+}
