@@ -7,16 +7,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
-#define BUFLEN 10000
+int BUFLEN = 10000;
 char *separator = "%%%";
+
+off_t fsize(const char *filename) {
+    struct stat st;
+
+    if (stat(filename, &st) == 0)
+        return st.st_size;
+
+    return -1;
+}
+
+char *subString(const char *input, int offset, int len, char *dest) {
+    int input_len = (int) strlen(input);
+
+    if (offset + len > input_len) {
+        return NULL;
+    }
+
+    strncpy(dest, input + offset, (size_t) len);
+    return dest;
+}
+
 
 int main(int argc, char **argv) {
     int sock_fd;
-    int len;
     struct sockaddr_in serv_addr;
-    char sendline[] = "PING";
-    char recvline[BUFLEN];
+
 
     if (argc != 4) {
         printf("usage: %s <IP address> <TCP port> <FilePath>\n", argv[0]);
@@ -24,7 +45,8 @@ int main(int argc, char **argv) {
     }
 
     char *filePath = argv[3];
-    char filePathWithSeparator[sizeof(filePath) + 3];
+    BUFLEN = (int) fsize(filePath);
+    char filePathWithSeparator[strlen(filePath) + 3];
     strcpy(filePathWithSeparator, filePath);
     strcat(filePathWithSeparator, separator);
     char fileContent[BUFLEN + 1];
@@ -38,15 +60,12 @@ int main(int argc, char **argv) {
         size_t newLen = fread(fileContent, sizeof(char), BUFLEN, fp);
         if (newLen == 0) {
             fputs("Error reading file", stderr);
-        } else {
-            fileContent[newLen++] = '\0';
         }
         fclose(fp);
     }
 
     char *finalVersion = strcat(toSend, fileContent);
-    printf("%s", finalVersion);
-
+//    printf("%s", finalVersion);
     // create the socket (add missing arguments)
     sock_fd = socket((AF_INET), (SOCK_STREAM), (0));
     if (!sock_fd) {
@@ -63,16 +82,20 @@ int main(int argc, char **argv) {
     // establish the connection (SYN, SYN+ANK, ACK) with "connect" procedure
     connect(sock_fd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
 
-    // send sendline buffer with the "send" system call and assign number of sent bytes to len
-    len = (int) send(sock_fd, finalVersion, strlen(finalVersion), 0);
-    printf("sent bytes: %d\n", len);
+    int sizeToBeSend = (int) strlen(finalVersion);
+    printf("Size of buffer to be send: %d\n", sizeToBeSend);
+    write(sock_fd, &sizeToBeSend, sizeof(sizeToBeSend));
 
-    // receive data to recvline buffer with the "recv" system call and assign number of received bytes to len
-    len = (int) recv(sock_fd, recvline, BUFLEN, 0);
-    printf("received bytes: %d\n", len);
-    recvline[len] = 0;
-    printf("received: %s\n", recvline);
+    // send buffer
+    int toEmit = 1;
+    int emitted = 0;
+    for (int i = 0; i < sizeToBeSend; i += toEmit) {
+        printf("Left to send: %d \n", sizeToBeSend - i);
+        emitted = (int) write(fd, finalVersion + i, (size_t) toEmit);
+        printf("Emitted: %d \n", emitted);
+    }
 
+    printf("Transfer completed.\n");
     return EXIT_SUCCESS;
 }
 
