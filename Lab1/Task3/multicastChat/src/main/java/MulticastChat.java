@@ -12,6 +12,7 @@ public class MulticastChat {
     private Thread listener;
     private InetAddress group;
     private int port;
+    private Thread writer;
     private String nick;
 
     public MulticastChat(InetAddress group, int port, String nick) {
@@ -19,9 +20,6 @@ public class MulticastChat {
         this.port = port;
         this.nick = nick;
     }
-
-    private Thread writer;
-
 
     void netStart() throws IOException {
         socket = new MulticastSocket(port);
@@ -48,7 +46,7 @@ public class MulticastChat {
         }
     }
 
-    void netStop() throws IOException {
+    void stop() throws IOException {
         listener.interrupt();
         listener = null;
         socket.leaveGroup(group);
