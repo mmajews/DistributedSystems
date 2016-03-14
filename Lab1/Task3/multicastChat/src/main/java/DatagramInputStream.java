@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 
 public class DatagramInputStream extends InputStream {
+    public static final int BUFFER_SIZE = 120000;
     byte[] buffer;
     int index, count;
     DatagramSocket socket;
@@ -9,7 +10,7 @@ public class DatagramInputStream extends InputStream {
 
     public DatagramInputStream(DatagramSocket socket) {
         this.socket = socket;
-        buffer = new byte[65508];
+        buffer = new byte[BUFFER_SIZE];
         packet = new DatagramPacket(buffer, 0);
     }
 

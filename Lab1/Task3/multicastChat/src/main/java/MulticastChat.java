@@ -48,7 +48,6 @@ public class MulticastChat {
 
     void stop() throws IOException {
         listener.interrupt();
-        listener = null;
         socket.leaveGroup(group);
         socket.close();
     }
