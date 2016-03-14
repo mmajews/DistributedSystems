@@ -31,7 +31,7 @@ public class MulticastChat {
         out = new OutputStreamWriter(new DatagramOutputStream(socket, group, port, 512), "UTF8");
         listener = new Thread() {
             public void run() {
-                netReceive();
+                receive();
             }
         };
         listener.start();
@@ -40,7 +40,7 @@ public class MulticastChat {
         while (true) {
             try {
                 String msg = bufferedReader.readLine();
-                netSend(msg);
+                send(msg);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class MulticastChat {
         socket.close();
     }
 
-    void netSend(String message) {
+    void send(String message) {
         try {
             out.write(nick+':'+message+"\n");
             out.flush();
@@ -64,12 +64,14 @@ public class MulticastChat {
         }
     }
 
-    void netReceive() {
+    void receive() {
         try {
             Thread myself = Thread.currentThread();
             while (listener == myself) {
                 String message = in.readLine();
-                System.out.println(message);
+                if (!message.split(":")[0].equals(nick)) {
+                    System.out.println(message);
+                }
             }
         } catch (IOException ex) {
             ex.printStackTrace();
