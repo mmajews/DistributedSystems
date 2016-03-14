@@ -1,5 +1,6 @@
 import sun.util.resources.cldr.lag.LocaleNames_lag;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +24,7 @@ public class MulticastChat {
         this.group = group;
         this.port = port;
         this.nick = nick;
+        System.out.println("Your nick: " + nick);
     }
 
     void netStart() throws IOException {
@@ -74,7 +76,19 @@ public class MulticastChat {
             while (listener == myself) {
                 String message = in.readLine();
                 if (!message.split(SEPARATOR)[0].equals(nick)) {
-                    System.out.println(message);
+                    String[] splittedMessage = message.split(SEPARATOR);
+                    String nick = splittedMessage[0];
+                    String actualMessage = splittedMessage[1];
+                    String time = splittedMessage[2];
+                    Integer receivedChecksum = Integer.parseInt(splittedMessage[3]);
+                    String messageToBeChecked = nick + SEPARATOR + actualMessage + SEPARATOR + time;
+                    Integer calculatedChecksum = messageToBeChecked.hashCode();
+                    final int differenceInChecksum = calculatedChecksum - receivedChecksum;
+                    if (differenceInChecksum != 0) {
+                        System.out.println("Malformed message received..");
+                    } else {
+                        System.out.println(String.format("User %s at %s send message: %s", nick, time, actualMessage));
+                    }
                 }
             }
         } catch (IOException ex) {
