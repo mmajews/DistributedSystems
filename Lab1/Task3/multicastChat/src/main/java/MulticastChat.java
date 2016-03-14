@@ -1,11 +1,15 @@
+import sun.util.resources.cldr.lag.LocaleNames_lag;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.time.LocalDateTime;
 
 public class MulticastChat {
+    public static final String SEPARATOR = "::";
     private MulticastSocket socket;
     private BufferedReader in;
     private OutputStreamWriter out;
@@ -54,7 +58,10 @@ public class MulticastChat {
 
     void send(String message) {
         try {
-            out.write(nick+':'+message+"\n");
+            final String messageBody = nick + SEPARATOR + message + SEPARATOR + LocalDateTime.now();
+            int checksum = messageBody.hashCode();
+            String toBeSend = messageBody + SEPARATOR + checksum + '\n';
+            out.write(toBeSend);
             out.flush();
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -66,7 +73,7 @@ public class MulticastChat {
             Thread myself = Thread.currentThread();
             while (listener == myself) {
                 String message = in.readLine();
-                if (!message.split(":")[0].equals(nick)) {
+                if (!message.split(SEPARATOR)[0].equals(nick)) {
                     System.out.println(message);
                 }
             }
