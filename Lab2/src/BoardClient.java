@@ -52,7 +52,11 @@ public class BoardClient {
 
     public static void main(String[] args) {
         try {
-            final String gameId = "1";
+            if (args.length < 2) {
+                System.out.println("Incorrect number of arguments <nick> <game_id>");
+                return;
+            }
+            final String gameId = args[1];
             System.err.println("Registering client..");
             boardHandler = (IBoardHandler) Naming.lookup("rmi://127.0.0.1/note");
             IBoardListener iBoardListener = (IBoardListener) UnicastRemoteObject.exportObject(new Listener(), 0);

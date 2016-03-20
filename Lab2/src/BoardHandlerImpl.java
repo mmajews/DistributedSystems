@@ -12,10 +12,10 @@ public class BoardHandlerImpl implements IBoardHandler {
 
     @Override
     public String register(IUser user, IBoardListener l, String gameId) throws RemoteException, UserRejectedException {
-        if (!userListenerMap.containsKey(user.getNick()) && userListenerMap.size() < 2 && ownersOfSymbols.size() < 2) {
+        if (!userListenerMap.containsKey(user.getNick()) && getUsersWithinGroup(gameId).size() < 2) {
             userListenerMap.put(user.getNick(), l);
             listOfUsers.add(user);
-            String selectedSymbol = getFreeUserSymbol();
+            String selectedSymbol = getFreeUserSymbol(user.getGameId());
             user.setSymbol(selectedSymbol);
             System.out.println(String.format("User %s is now registered with symbol %s, gameid %s", user.getNick(), user.getSymbol(), user.getGameId()));
 
@@ -25,7 +25,6 @@ public class BoardHandlerImpl implements IBoardHandler {
             }
             ownersOfSymbols.put(selectedSymbol, user);
 
-
             return selectedSymbol;
         } else {
             return "";
@@ -33,30 +32,38 @@ public class BoardHandlerImpl implements IBoardHandler {
     }
 
     private void nextTurn(String gameId) throws RemoteException {
-        if (userListenerMap.size() == 2) {
+
+        if (listOfUsers.stream().filter(user -> {
+            try {
+                return Objects.equals(user.getGameId(), gameId);
+            } catch (RemoteException e) {
+                return false;
+            }
+        }).count() == 2) {
             final String lastSelectedUser = lastSelectedUserMapToGameId.get(gameId);
             System.out.println("Next turn!");
             if (lastSelectedUser == null) {
-                lastSelectedUserMapToGameId.put(gameId, listOfUsers.stream().filter(user -> {
-                    try {
-                        return Objects.equals(user.getGameId(), gameId);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }).findFirst().get().getNick());
+                List<IUser> availableUsers = getUsersWithinGroup(gameId);
+                final String nickOfSelectedUser = availableUsers.get(0).getNick();
+                lastSelectedUserMapToGameId.put(gameId, nickOfSelectedUser);
             } else {
-                lastSelectedUserMapToGameId.put(gameId, listOfUsers.stream().filter(user -> {
-                    try {
-                        return !Objects.equals(user.getNick(), lastSelectedUser);
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }).findFirst().get().getNick());
+                List<IUser> availableUsers = getUsersWithinGroup(gameId);
+                final String nickOfSelectedUser = !Objects.equals(availableUsers.get(0).getNick(), lastSelectedUser)
+                        ? availableUsers.get(0).getNick() : availableUsers.get(1).getNick();
+                lastSelectedUserMapToGameId.put(gameId, nickOfSelectedUser);
             }
             requestMoveFromClient(lastSelectedUserMapToGameId.get(gameId), gameId);
         }
+    }
+
+    private List<IUser> getUsersWithinGroup(String gameId) throws RemoteException {
+        List<IUser> availableUsers = new ArrayList<>();
+        for (IUser user : listOfUsers) {
+            if (Objects.equals(user.getGameId(), gameId)) {
+                availableUsers.add(user);
+            }
+        }
+        return availableUsers;
     }
 
     @Override
@@ -117,7 +124,17 @@ public class BoardHandlerImpl implements IBoardHandler {
         }
     }
 
-    public String getFreeUserSymbol() {
-        return availableSymbolsToTake.stream().filter(symbol -> !ownersOfSymbols.containsKey(symbol)).findFirst().get();
+    public String getFreeUserSymbol(String gameId) {
+        List<String> takenSymbols = new ArrayList<>();
+        for (Map.Entry<String, IUser> stringIUserEntry : ownersOfSymbols.entrySet()) {
+            try {
+                if (Objects.equals(stringIUserEntry.getValue().getGameId(), gameId)) {
+                    takenSymbols.add(stringIUserEntry.getKey());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+        return availableSymbolsToTake.stream().filter(symbol -> !takenSymbols.contains(symbol)).findFirst().get();
     }
 }
