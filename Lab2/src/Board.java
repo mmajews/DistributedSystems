@@ -18,6 +18,17 @@ public class Board {
         return Optional.empty();
     }
 
+    public void performMove(IUser user, int order) {
+        for (Field[] fields : boardRepresentation) {
+            for (Field field : fields) {
+                if (field.getOrder() == order) {
+                    field.take(user);
+                    break;
+                }
+            }
+        }
+    }
+
     public List<Field> getFreeSpots() {
         List<Field> freeSpots = new ArrayList<>();
 

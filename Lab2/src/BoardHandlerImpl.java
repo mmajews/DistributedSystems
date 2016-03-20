@@ -17,37 +17,14 @@ public class BoardHandlerImpl implements IBoardHandler {
     }
 
     @Override
-    public String getText() throws RemoteException {
-        return buf.toString();
-    }
-
-    public void appendText(String newNote) throws RemoteException {
-        userListenerMap.forEach((k, v) -> {
-            try {
-                v.onNewText(newNote);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        });
-        buf.append("\n" + newNote);
-    }
-
-    public void clean() throws RemoteException {
-        buf = new StringBuffer();
-    }
-
-    @Override
-    public void clean(String nick) throws RemoteException, UserRejectedException {
-        userListenerMap.remove(nick);
-    }
-
-    @Override
-    public String register(IUser u, IBoardListener l) throws RemoteException, UserRejectedException {
-        if (!userListenerMap.containsKey(u.getNick()) && userListenerMap.size() < 2 && ownersOfSymbols.size() < 2) {
-            userListenerMap.put(u.getNick(), l);
-            listOfNicks.add(u.getNick());
+    public String register(IUser user, IBoardListener l) throws RemoteException, UserRejectedException {
+        if (!userListenerMap.containsKey(user.getNick()) && userListenerMap.size() < 2 && ownersOfSymbols.size() < 2) {
+            userListenerMap.put(user.getNick(), l);
+            listOfNicks.add(user.getNick());
             String selectedSymbol = getFreeUserSymbol();
-            ownersOfSymbols.put(selectedSymbol, u);
+            user.setSymbol(selectedSymbol);
+            System.out.println(String.format("User %s is now registered with symbol %s", user.getNick(), user.getSymbol()));
+            ownersOfSymbols.put(selectedSymbol, user);
             return selectedSymbol;
         } else {
             return "";
@@ -68,6 +45,13 @@ public class BoardHandlerImpl implements IBoardHandler {
 
     @Override
     public void requestFirstMove() {
+        nextTurn();
+    }
+
+    @Override
+    public void sendMove(IUser user, int order) throws RemoteException {
+        System.out.println("Move from " + user.getNick() + " registered. Processing...");
+        board.performMove(user, order);
         nextTurn();
     }
 

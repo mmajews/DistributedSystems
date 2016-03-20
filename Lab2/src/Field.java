@@ -1,18 +1,18 @@
 import java.io.Serializable;
+import java.rmi.RemoteException;
 
 public class Field implements Serializable {
     //Counting from left top to right down
     private int order;
     private FieldState fieldState;
     private IUser takenBy = null;
-    private String symbolOfBeingTaken;
     private Object id;
 
-    private void take(IUser user, String symbolOfBeingTaken) {
+    public void take(IUser user) {
         if (fieldState != FieldState.TAKEN) {
             takenBy = user;
-            this.symbolOfBeingTaken = symbolOfBeingTaken;
         }
+        fieldState = FieldState.TAKEN;
     }
 
     public Field(int order) {
@@ -29,7 +29,12 @@ public class Field implements Serializable {
     }
 
     public String getSymbolOfBeingTaken() {
-        return symbolOfBeingTaken;
+        try {
+            return takenBy.getSymbol();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
     }
 
     enum FieldState {
