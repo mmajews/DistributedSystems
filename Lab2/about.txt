@@ -1,0 +1,22 @@
+Zadanie domowe
+
+Zadanie domowe dotyczące technologii RMI polega na stworzeniu wybranej przez siebie gry sieciowej: Kółko i krzyżyk lub Statki. Możliwość otrzymania maksimum punktów NIE jest uzależniona od wyboru zadania.
+Kółko i krzyżyk
+
+Zaimplementować serwer i klienta gry Kółko i krzyżyk. Do oceny zadania brany będzie pod uwagę wariant podstawowy z planszą 3x3 (nic nie stoi na przeszkodzie, by zaimplementować również tryb gry z nieograniczoną planszą). 
+Statki
+
+Zaimplementować serwer i klienta gry Statki. Do oceny zadania brany będzie pod uwagę wariant uproszczony z ustaloną wielkością boku kwadratu (10) oraz ograniczoną ilością typów floty i ilości jednostek (wystarczy 1 rodzaj statku). Nic nie stoi na przeszkodzie, by zaimplementować bardziej rozbudowane warianty gry.
+Uwagi dotyczące zadań
+
+    klient po dołączeniu się do serwera powinien mieć możliwość wyboru trybu gry: z komputerem lub z innym graczem;
+    gracze powinni być identyfikowani przez nick (lub avatar);
+    tworzenie graficznego interfejsu użytkownika NIE jest wymagane i nie wpływa na ilość przyznawanych punktów;
+    parametry programów (adres IP i port RMI Registry, nick) powinny być podawane przez argumenty wywołania programu lub za pomocą mechanizmu Properties;
+    proszę zapewnić bezpieczny ze względu na wielowątkowość oraz wydajny mechanizm dostępu do zasobów obiektów zdalnych (co, jeśli gracze są bardzo szybkimi botami?);
+    proszę zadbać o obsługę wyjątków;
+    zadbanie o kwestie bezpieczeństwa wykonywanego kodu (mechanizmy SecurityManager) nie są wymagane, jednak będą docenione w razie niedoboru punktów;
+    kompilacja programów powinna wykorzystywać narzędzia typu ant/maven (lub samemu zapewniać szybki sposób uruchamiania zadania podczas sprawdzania z prowadzącym);
+    prezentacja zadania powinna być zrealizowana w środowisku rozproszonym
+    komentarze w kodzie źródłowym ułatwią i przyspieszą sprawdzenie zadania;
+    zwrócić uwagę na wymagania odnośnie publikowania zadań domowych opisane w Regulaminie Zajęć.
