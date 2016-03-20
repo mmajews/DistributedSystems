@@ -17,7 +17,7 @@ public class BoardClient {
         }
 
         @Override
-        public void onYourTurn(List<Field> freeSpots, String visualRepresentation) throws RemoteException {
+        public void onYourTurn(List<Field> freeSpots, String visualRepresentation, String gameId) throws RemoteException {
             System.out.println("Your turn!");
             System.out.println("Current state of tic-tac-to:");
             System.out.println(visualRepresentation);
@@ -32,21 +32,26 @@ public class BoardClient {
                     continue;
                 }
 
-                boardHandler.sendMove(user, chosenField);
+                boardHandler.sendMove(user, chosenField, gameId);
                 break;
             }
         }
 
-
+        @Override
+        public void onGameEnd(String winnerSymbol) throws RemoteException {
+            System.out.println("Game ended");
+            System.out.println(winnerSymbol.equals(user.getSymbol()) ? "You won" : "You lost");
+        }
     }
 
     public static void main(String[] args) {
         try {
+            final String gameId = "1";
             System.err.println("Registering client..");
             boardHandler = (IBoardHandler) Naming.lookup("rmi://127.0.0.1/note");
             IBoardListener iBoardListener = (IBoardListener) UnicastRemoteObject.exportObject(new Listener(), 0);
-            user = (IUser) UnicastRemoteObject.exportObject(new User(args[0]), 0);
-            String symbol = boardHandler.register(user, iBoardListener);
+            user = (IUser) UnicastRemoteObject.exportObject(new User(args[0], gameId), 0);
+            String symbol = boardHandler.register(user, iBoardListener, gameId);
             if (Objects.equals(symbol, "")) {
                 System.out.println("Unfortunately we encountered problem while registering you. Exiting");
                 return;
@@ -54,7 +59,7 @@ public class BoardClient {
 
             System.out.println(String.format("Your tic-tac-toe symbol is %s", symbol));
             System.out.println("Waiting for another user to join / your turn");
-            boardHandler.requestFirstMove();
+            boardHandler.requestFirstMove(gameId);
         } catch (Exception e) {
             e.printStackTrace();
         }

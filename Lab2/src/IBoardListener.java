@@ -5,5 +5,7 @@ import java.util.List;
 public interface IBoardListener extends Remote {
     void onNewText(String text) throws RemoteException;
 
-    void onYourTurn(List<Field> freeSpots, String visualRepresentation) throws RemoteException;
+    void onYourTurn(List<Field> freeSpots, String visualRepresentation, String gameId) throws RemoteException;
+
+    void onGameEnd(String winnerSymbol) throws RemoteException;
 }

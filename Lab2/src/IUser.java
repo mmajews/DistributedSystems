@@ -7,4 +7,8 @@ public interface IUser extends Remote {
     String getSymbol() throws RemoteException;
 
     void setSymbol(String symbol) throws RemoteException;
+
+    String getGameId() throws RemoteException;
+
+    void setGameId(String gameId) throws RemoteException;
 }

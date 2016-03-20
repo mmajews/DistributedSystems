@@ -1,5 +1,6 @@
 import com.sun.org.apache.xml.internal.serialize.LineSeparator;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,15 +15,79 @@ public class Board {
             {new Field(6), new Field(7), new Field(8)}
     };
 
-    public Optional<IUser> detectIfWinner() {
+    public Optional<String> detectIfWinner() {
+        boolean isWinner;
+        /*Check for situation:
+        X 1 2
+        X 4 5
+        X 7 8 */
+        for (int j = 0; j < widthOfBoard; j++) {
+            if (boardRepresentation[0][j].isAvaiableToTake()) {
+                continue;
+            }
+            isWinner = true;
+            String selectedString = boardRepresentation[0][j].getSymbolOfBeingTaken();
+            for (int i = 0; i < heightOfBoard; i++) {
+                if (boardRepresentation[i][j].isAvaiableToTake() &&
+                        !boardRepresentation[i][j].getSymbolOfBeingTaken().equals(selectedString)) {
+                    isWinner = false;
+                    break;
+                }
+            }
+            if (isWinner) {
+                System.out.println("Winning combination horizontal");
+                return Optional.of(selectedString);
+            }
+        }
+
+
+        /*Check for situation:
+        Y Y Y
+        3 4 5
+        6 7 8 */
+        for (int j = 0; j < widthOfBoard; j++) {
+            if (boardRepresentation[j][0].isAvaiableToTake()) {
+                continue;
+            }
+            isWinner = true;
+            String selectedString = boardRepresentation[j][0].getSymbolOfBeingTaken();
+            for (int i = 0; i < heightOfBoard; i++) {
+                if (boardRepresentation[j][i].isAvaiableToTake() &&
+                        !boardRepresentation[j][i].getSymbolOfBeingTaken().equals(selectedString)) {
+                    isWinner = false;
+                    break;
+                }
+            }
+            if (isWinner) {
+                System.out.println("Winning combination vertical");
+                return Optional.of(selectedString);
+            }
+        }
+
+
+        /*Check for situation:
+        Y 1 2
+        3 Y 5
+        6 7 Y */
+        String selectedString = boardRepresentation[0][0].getSymbolOfBeingTaken();
+        if (boardRepresentation[1][1].getSymbolOfBeingTaken().equals(selectedString) && boardRepresentation[2][2].getSymbolOfBeingTaken().equals(selectedString)) {
+            isWinner = true;
+            return Optional.of(selectedString);
+        }
+        selectedString = boardRepresentation[1][1].getSymbolOfBeingTaken();
+        if (boardRepresentation[2][0].getSymbolOfBeingTaken().equals(selectedString) && boardRepresentation[0][2].getSymbolOfBeingTaken().equals(selectedString)) {
+            isWinner = true;
+            return Optional.of(selectedString);
+        }
+
         return Optional.empty();
     }
 
-    public void performMove(IUser user, int order) {
+    public void performMove(IUser user, int order) throws RemoteException {
         for (Field[] fields : boardRepresentation) {
             for (Field field : fields) {
                 if (field.getOrder() == order) {
-                    field.take(user);
+                    field.take(user, user.getSymbol());
                     break;
                 }
             }
