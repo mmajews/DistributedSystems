@@ -3,7 +3,7 @@ import java.util.*;
 
 public class BoardHandlerImpl implements IBoardHandler {
 
-    private String lastSelectedUser;
+    private Map<String, String> lastSelectedUserMapToGameId = new HashMap<>();
     private List<IUser> listOfUsers = new ArrayList<>();
     private Map<String, IUser> ownersOfSymbols = new HashMap<>();
     private final List<String> availableSymbolsToTake = Arrays.asList("X", "Y");
@@ -34,25 +34,26 @@ public class BoardHandlerImpl implements IBoardHandler {
 
     private void nextTurn(String gameId) throws RemoteException {
         if (userListenerMap.size() == 2) {
+            final String lastSelectedUser = lastSelectedUserMapToGameId.get(gameId);
             System.out.println("Next turn!");
             if (lastSelectedUser == null) {
-                lastSelectedUser = listOfUsers.stream().filter(user -> {
+                lastSelectedUserMapToGameId.put(gameId, listOfUsers.stream().filter(user -> {
                     try {
                         return Objects.equals(user.getGameId(), gameId);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;
                     }
-                }).findFirst().get().getNick();
+                }).findFirst().get().getNick());
             } else {
-                lastSelectedUser = listOfUsers.stream().filter(user -> {
+                lastSelectedUserMapToGameId.put(gameId, listOfUsers.stream().filter(user -> {
                     try {
                         return !Objects.equals(user.getNick(), lastSelectedUser);
                     } catch (RemoteException e) {
                         e.printStackTrace();
                         return false;
                     }
-                }).findFirst().get().getNick();
+                }).findFirst().get().getNick());
             }
             requestMoveFromClient(lastSelectedUser, gameId);
         }
