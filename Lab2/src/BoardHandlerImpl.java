@@ -55,7 +55,7 @@ public class BoardHandlerImpl implements IBoardHandler {
                     }
                 }).findFirst().get().getNick());
             }
-            requestMoveFromClient(lastSelectedUser, gameId);
+            requestMoveFromClient(lastSelectedUserMapToGameId.get(gameId), gameId);
         }
     }
 
