@@ -8,7 +8,7 @@ public class BoardHandlerImpl implements IBoardHandler {
     private Map<String, IUser> ownersOfSymbols = new HashMap<>();
     private final List<String> availableSymbolsToTake = Arrays.asList("X", "Y");
     private Map<String, IBoardListener> userListenerMap = new HashMap<>();
-    private Board board = new Board();
+    private Map<String, Board> gameIdToBoardMap = new HashMap<>();
 
     @Override
     public String register(IUser user, IBoardListener l, String gameId) throws RemoteException, UserRejectedException {
@@ -17,8 +17,15 @@ public class BoardHandlerImpl implements IBoardHandler {
             listOfUsers.add(user);
             String selectedSymbol = getFreeUserSymbol();
             user.setSymbol(selectedSymbol);
-            System.out.println(String.format("User %s is now registered with symbol %s", user.getNick(), user.getSymbol()));
+            System.out.println(String.format("User %s is now registered with symbol %s, gameid %s", user.getNick(), user.getSymbol(), user.getGameId()));
+
+            if (gameIdToBoardMap.get(gameId) == null) {
+                Board board = new Board();
+                gameIdToBoardMap.put(gameId, board);
+            }
             ownersOfSymbols.put(selectedSymbol, user);
+
+
             return selectedSymbol;
         } else {
             return "";
@@ -63,16 +70,30 @@ public class BoardHandlerImpl implements IBoardHandler {
     @Override
     public void sendMove(IUser user, int order, String gameId) throws RemoteException {
         System.out.println("Move from " + user.getNick() + " registered. Processing...");
+        final Board board = gameIdToBoardMap.get(gameId);
         board.performMove(user, order);
-
         Optional<String> winnerSymbol = board.detectIfWinner();
         if (winnerSymbol.isPresent()) {
             System.out.println("Winner symbol: " + winnerSymbol.get());
             sendMessageAboutWinnerToPlayers(gameId, winnerSymbol.get());
             return;
         }
+        if (board.detectIfTie()) {
+            sendMessageAboutTieToPlayes(gameId);
+            return;
+        }
 
         nextTurn(gameId);
+    }
+
+    private void sendMessageAboutTieToPlayes(String gameId) throws RemoteException {
+        List<String> userToBeSendAboutTie = new ArrayList<>();
+        for (IUser user : listOfUsers) {
+            if (Objects.equals(user.getGameId(), gameId)) {
+                userListenerMap.get(user.getNick()).onTie();
+            }
+            System.out.println("Game ended!");
+        }
     }
 
     private void sendMessageAboutWinnerToPlayers(String gameId, String winnerSymbol) throws RemoteException {
@@ -88,6 +109,7 @@ public class BoardHandlerImpl implements IBoardHandler {
     private void requestMoveFromClient(String selectedUser, String gameId) {
         System.out.println(String.format("Sending request to %s", selectedUser));
         try {
+            final Board board = gameIdToBoardMap.get(gameId);
             userListenerMap.get(selectedUser).onYourTurn(board.getFreeSpots(), board.getVisualRepresentation(), gameId);
         } catch (RemoteException e) {
             e.printStackTrace();

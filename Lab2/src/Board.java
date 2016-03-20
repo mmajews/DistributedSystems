@@ -28,8 +28,11 @@ public class Board {
             isWinner = true;
             String selectedString = boardRepresentation[0][j].getSymbolOfBeingTaken();
             for (int i = 0; i < heightOfBoard; i++) {
-                if (boardRepresentation[i][j].isAvaiableToTake() &&
-                        !boardRepresentation[i][j].getSymbolOfBeingTaken().equals(selectedString)) {
+                if (!boardRepresentation[i][j].isAvaiableToTake()) {
+                    isWinner = false;
+                    break;
+                }
+                if (!boardRepresentation[i][j].getSymbolOfBeingTaken().equals(selectedString)) {
                     isWinner = false;
                     break;
                 }
@@ -52,11 +55,15 @@ public class Board {
             isWinner = true;
             String selectedString = boardRepresentation[j][0].getSymbolOfBeingTaken();
             for (int i = 0; i < heightOfBoard; i++) {
-                if (boardRepresentation[j][i].isAvaiableToTake() &&
-                        !boardRepresentation[j][i].getSymbolOfBeingTaken().equals(selectedString)) {
+                if (!boardRepresentation[j][i].isAvaiableToTake()) {
                     isWinner = false;
                     break;
                 }
+                if (!boardRepresentation[j][i].getSymbolOfBeingTaken().equals(selectedString)) {
+                    isWinner = false;
+                    break;
+                }
+
             }
             if (isWinner) {
                 System.out.println("Winning combination vertical");
@@ -72,6 +79,7 @@ public class Board {
         String selectedString = boardRepresentation[0][0].getSymbolOfBeingTaken();
         if (boardRepresentation[1][1].getSymbolOfBeingTaken().equals(selectedString) && boardRepresentation[2][2].getSymbolOfBeingTaken().equals(selectedString)) {
             isWinner = true;
+            System.out.println("Winning combination left top to right down");
             return Optional.of(selectedString);
         }
         selectedString = boardRepresentation[1][1].getSymbolOfBeingTaken();
@@ -119,5 +127,21 @@ public class Board {
         return visualRepresentation.toString();
     }
 
+
+    public boolean detectIfTie() {
+        boolean tie = true;
+        for (Field[] fields : boardRepresentation) {
+            for (Field field : fields) {
+                if (field.isAvaiableToTake()) {
+                    tie = false;
+                    break;
+                }
+            }
+            if (!tie) {
+                break;
+            }
+        }
+        return tie;
+    }
 
 }

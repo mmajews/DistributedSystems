@@ -42,6 +42,12 @@ public class BoardClient {
             System.out.println("Game ended");
             System.out.println(winnerSymbol.equals(user.getSymbol()) ? "You won" : "You lost");
         }
+
+        @Override
+        public void onTie() throws RemoteException {
+            System.out.println("Game ended");
+            System.out.println("Tie!");
+        }
     }
 
     public static void main(String[] args) {
