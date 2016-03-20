@@ -2,7 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface IBoardHandler extends Remote {
-    String register(IUser u, IBoardListener l, String gameId) throws RemoteException, UserRejectedException;
+    String register(IUser u, IBoardListener l, String gameId, boolean ifComputerChallenge) throws RemoteException, UserRejectedException;
 
     void requestFirstMove(String gameId) throws RemoteException;
 

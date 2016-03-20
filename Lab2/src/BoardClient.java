@@ -61,7 +61,8 @@ public class BoardClient {
             boardHandler = (IBoardHandler) Naming.lookup("rmi://127.0.0.1/note");
             IBoardListener iBoardListener = (IBoardListener) UnicastRemoteObject.exportObject(new Listener(), 0);
             user = (IUser) UnicastRemoteObject.exportObject(new User(args[0], gameId), 0);
-            String symbol = boardHandler.register(user, iBoardListener, gameId);
+            //FIXME handle computer situation
+            String symbol = boardHandler.register(user, iBoardListener, gameId, false);
             if (Objects.equals(symbol, "")) {
                 System.out.println("Unfortunately we encountered problem while registering you. Exiting");
                 return;

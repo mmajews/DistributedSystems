@@ -1,3 +1,6 @@
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import java.rmi.RemoteException;
 import java.util.*;
 
@@ -5,13 +8,24 @@ public class BoardHandlerImpl implements IBoardHandler {
 
     private Map<String, String> lastSelectedUserMapToGameId = new HashMap<>();
     private List<IUser> listOfUsers = new ArrayList<>();
-    private Map<String, IUser> ownersOfSymbols = new HashMap<>();
+    private Multimap<String, IUser> ownersOfSymbols = ArrayListMultimap.create();
     private final List<String> availableSymbolsToTake = Arrays.asList("X", "Y");
     private Map<String, IBoardListener> userListenerMap = new HashMap<>();
     private Map<String, Board> gameIdToBoardMap = new HashMap<>();
+    private List<IUser> userCompetingWithComputer = new ArrayList<>();
 
     @Override
-    public String register(IUser user, IBoardListener l, String gameId) throws RemoteException, UserRejectedException {
+    public String register(IUser user, IBoardListener l, String gameId, boolean competingWithComputer) throws RemoteException, UserRejectedException {
+        if (competingWithComputer) {
+            userCompetingWithComputer.add(user);
+            Board board = new Board();
+            gameIdToBoardMap.put(gameId, board);
+
+            //FIXME to be ended
+        }
+
+
+
         if (!userListenerMap.containsKey(user.getNick()) && getUsersWithinGroup(gameId).size() < 2) {
             userListenerMap.put(user.getNick(), l);
             listOfUsers.add(user);
@@ -126,7 +140,7 @@ public class BoardHandlerImpl implements IBoardHandler {
 
     public String getFreeUserSymbol(String gameId) {
         List<String> takenSymbols = new ArrayList<>();
-        for (Map.Entry<String, IUser> stringIUserEntry : ownersOfSymbols.entrySet()) {
+        for (Map.Entry<String, IUser> stringIUserEntry : ownersOfSymbols.entries()) {
             try {
                 if (Objects.equals(stringIUserEntry.getValue().getGameId(), gameId)) {
                     takenSymbols.add(stringIUserEntry.getKey());
