@@ -25,7 +25,6 @@ public class BoardHandlerImpl implements IBoardHandler {
         }
 
 
-
         if (!userListenerMap.containsKey(user.getNick()) && getUsersWithinGroup(gameId).size() < 2) {
             userListenerMap.put(user.getNick(), l);
             listOfUsers.add(user);
@@ -116,6 +115,7 @@ public class BoardHandlerImpl implements IBoardHandler {
             }
             System.out.println("Game ended!");
         }
+        unregisterGroup(gameId);
     }
 
     private void sendMessageAboutWinnerToPlayers(String gameId, String winnerSymbol) throws RemoteException {
@@ -126,6 +126,26 @@ public class BoardHandlerImpl implements IBoardHandler {
             }
             System.out.println("Game ended!");
         }
+        unregisterGroup(gameId);
+    }
+
+    private void unregisterGroup(String gameId) throws RemoteException {
+        List<String> nicksToBeRemoved = new ArrayList<>();
+
+        for (IUser user : listOfUsers) {
+            if (Objects.equals(user.getGameId(), gameId)) {
+                nicksToBeRemoved.add(user.getNick());
+                listOfUsers.remove(user);
+            }
+        }
+
+        lastSelectedUserMapToGameId.remove(gameId);
+        nicksToBeRemoved.stream().forEach(nick -> {
+            ownersOfSymbols.removeAll(nick);
+            userListenerMap.remove(nick);
+
+        });
+
     }
 
     private void requestMoveFromClient(String selectedUser, String gameId) {
