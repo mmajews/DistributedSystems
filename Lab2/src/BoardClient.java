@@ -52,13 +52,15 @@ public class BoardClient {
 
     public static void main(String[] args) {
         try {
-            if (args.length < 2) {
-                System.out.println("Incorrect number of arguments <nick> <game_id>");
+            if (args.length < 3) {
+                System.out.println("Incorrect number of arguments <nick> <game_id> <address>");
                 return;
             }
             final String gameId = args[1];
             System.err.println("Registering client..");
-            boardHandler = (IBoardHandler) Naming.lookup("rmi://127.0.0.1/note");
+//            final String adress = "rmi://127.0.0.1/note";
+            final String adress = args[2];
+            boardHandler = (IBoardHandler) Naming.lookup(adress);
             IBoardListener iBoardListener = (IBoardListener) UnicastRemoteObject.exportObject(new Listener(), 0);
             user = (IUser) UnicastRemoteObject.exportObject(new User(args[0], gameId), 0);
             //FIXME handle computer situation
