@@ -13,6 +13,7 @@ public class BoardHandlerImpl implements IBoardHandler {
     private Map<String, IBoardListener> userListenerMap = new HashMap<>();
     private Map<String, Board> gameIdToBoardMap = new HashMap<>();
     private List<IUser> userCompetingWithComputer = new ArrayList<>();
+    private Map<String, Boolean> gameIdWithComputerToIfLastMove = new HashMap<>();
 
     @Override
     public String register(IUser user, IBoardListener l, String gameId, boolean competingWithComputer) throws RemoteException, UserRejectedException {
@@ -20,7 +21,7 @@ public class BoardHandlerImpl implements IBoardHandler {
             userCompetingWithComputer.add(user);
             Board board = new Board();
             gameIdToBoardMap.put(gameId, board);
-
+            nextTurnComputer(gameId);
             //FIXME to be ended
         }
 
@@ -41,6 +42,22 @@ public class BoardHandlerImpl implements IBoardHandler {
             return selectedSymbol;
         } else {
             return "";
+        }
+    }
+
+    private void nextTurnComputer(String gameId) throws RemoteException {
+        //if user last move
+        if (gameIdWithComputerToIfLastMove.get(gameId)) {
+            Board board = gameIdToBoardMap.get(gameId);
+            board.randomMove(availableSymbolsToTake.get(1));
+        }
+        //if computer last move
+        else {
+
+        }
+
+        for (IUser user : userCompetingWithComputer) {
+            //FIXME
         }
     }
 

@@ -102,6 +102,17 @@ public class Board {
         }
     }
 
+    private void performMove(int order, String symbol) throws RemoteException {
+        for (Field[] fields : boardRepresentation) {
+            for (Field field : fields) {
+                if (field.getOrder() == order) {
+                    field.take(null, symbol);
+                    break;
+                }
+            }
+        }
+    }
+
     public List<Field> getFreeSpots() {
         List<Field> freeSpots = new ArrayList<>();
 
@@ -144,4 +155,8 @@ public class Board {
         return tie;
     }
 
+    public void randomMove(String symbol) throws RemoteException {
+        int orderToTake = getFreeSpots().get(0).getOrder();
+        performMove(orderToTake, symbol);
+    }
 }

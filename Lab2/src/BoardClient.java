@@ -52,8 +52,8 @@ public class BoardClient {
 
     public static void main(String[] args) {
         try {
-            if (args.length < 3) {
-                System.out.println("Incorrect number of arguments <nick> <game_id> <address>");
+            if (args.length < 4) {
+                System.out.println("Incorrect number of arguments <nick> <game_id> <address> <if-with-computer>");
                 return;
             }
             final String gameId = args[1];
@@ -64,7 +64,7 @@ public class BoardClient {
             IBoardListener iBoardListener = (IBoardListener) UnicastRemoteObject.exportObject(new Listener(), 0);
             user = (IUser) UnicastRemoteObject.exportObject(new User(args[0], gameId), 0);
             //FIXME handle computer situation
-            String symbol = boardHandler.register(user, iBoardListener, gameId, false);
+            String symbol = boardHandler.register(user, iBoardListener, gameId, Boolean.parseBoolean(args[3]));
             if (Objects.equals(symbol, "")) {
                 System.out.println("Unfortunately we encountered problem while registering you. Exiting");
                 return;
