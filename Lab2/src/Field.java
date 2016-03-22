@@ -10,6 +10,7 @@ public class Field implements Serializable {
 
     public void take(IUser user, String symbol) {
         if (fieldState != FieldState.TAKEN) {
+            System.out.println("Taking filed " + order + " by symbol " + symbol);
             fieldState = FieldState.TAKEN;
             takenBy = user;
             this.symbol = symbol;

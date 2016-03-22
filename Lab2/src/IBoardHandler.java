@@ -6,5 +6,8 @@ public interface IBoardHandler extends Remote {
 
     void requestFirstMove(String gameId) throws RemoteException;
 
-    void sendMove(IUser user, int order, String gameId) throws RemoteException;
-}
+    void sendMove(IUser user, int order, String gameId, Boolean gameWithComputer) throws RemoteException;
+
+    void nextTurnInGameWithComputer(String gameId) throws RemoteException;
+
+    }

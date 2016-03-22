@@ -92,6 +92,7 @@ public class Board {
     }
 
     public void performMove(IUser user, int order) throws RemoteException {
+        System.out.println("Performing move by user " + user.getNick() + " order " + order + " symbol " + user.getSymbol());
         for (Field[] fields : boardRepresentation) {
             for (Field field : fields) {
                 if (field.getOrder() == order) {
@@ -157,6 +158,7 @@ public class Board {
 
     public void randomMove(String symbol) throws RemoteException {
         int orderToTake = getFreeSpots().get(0).getOrder();
+        System.out.println("Bot with symbol " + symbol + " taking" + orderToTake);
         performMove(orderToTake, symbol);
     }
 }

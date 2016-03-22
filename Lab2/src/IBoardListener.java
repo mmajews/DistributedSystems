@@ -7,6 +7,8 @@ public interface IBoardListener extends Remote {
 
     void onYourTurn(List<Field> freeSpots, String visualRepresentation, String gameId) throws RemoteException;
 
+    void onYourTurnComputerGame(List<Field> freeSpots, String visualRepresentation, String gameId) throws RemoteException;
+
     void onGameEnd(String winnerSymbol) throws RemoteException;
 
     void onTie() throws RemoteException;
