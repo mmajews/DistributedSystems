@@ -5,32 +5,40 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class TaskSendersService {
-    private final static int threadWaitingTime = 1000;
 
     @Autowired
     private SenderService senderService;
 
-    public List<Thread> createSenders(int numberOfSenders){
+    List<Thread> createSumSenders(int numberOfSenders){
         List<Thread> threadsToBeReturned = new ArrayList<>();
         for(int i= 0;i<numberOfSenders;i++){
             int idOfThread = i;
-            threadsToBeReturned.add(new Thread(() -> {
-                while(true){
-                    try {
-                        String equation = "2+2";
-                        System.out.println(String.format("Thread number :%d sending equation: %s",idOfThread, equation));
-                        senderService.sendSum(equation);
-                        Thread.sleep(threadWaitingTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }));
+            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"+")));
         }
         return threadsToBeReturned;
     }
+
+    List<Thread> createMultiplySenders(int numberOfSenders){
+        List<Thread> threadsToBeReturned = new ArrayList<>();
+        for(int i= 0;i<numberOfSenders;i++){
+            int idOfThread = i;
+            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"*")));
+        }
+        return threadsToBeReturned;
+    }
+
+    List<Thread> createDivideSenders(int numberOfSenders){
+        List<Thread> threadsToBeReturned = new ArrayList<>();
+        for(int i= 0;i<numberOfSenders;i++){
+            int idOfThread = i;
+            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"/")));
+        }
+        return threadsToBeReturned;
+    }
+
 
 }

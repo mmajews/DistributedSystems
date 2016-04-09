@@ -13,10 +13,11 @@ class MyRunner implements CommandLineRunner {
     @Autowired
     private TaskSendersService senderService;
 
-
     @Override
     public void run(String... strings) throws Exception {
         logger.info("Program started!");
-        senderService.createSenders(10).stream().forEach(Thread::start);
+        senderService.createSumSenders(10).stream().forEach(Thread::start);
+        senderService.createMultiplySenders(10).stream().forEach(Thread::start);
+        senderService.createDivideSenders(10).stream().forEach(Thread::start);
     }
 }
