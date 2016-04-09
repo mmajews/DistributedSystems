@@ -29,7 +29,7 @@ class Solver implements MessageListener {
     }
 
     private double parseAndCount(String toParse){
-        String[] parsed = toParse.split("[*/+-]");
+        String[] parsed = toParse.split("((?<=[/+\\*])|(?=[/+\\*]))");
         double firstNumber = Double.parseDouble(parsed[0]);
         double secondNumber = Double.parseDouble(parsed[2]);
         switch (parsed[1]){
@@ -45,6 +45,6 @@ class Solver implements MessageListener {
     }
 
     private void publishSolution(String equation, String solution){
-        //FIXME
+        logger.info(String.format("Equation: %s=%s",equation,solution));
     }
 }
