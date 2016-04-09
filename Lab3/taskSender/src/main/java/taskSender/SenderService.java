@@ -14,10 +14,10 @@ class SenderService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    void sendSum(String equation){
+    void send(String where,String equation){
         MessageCreator messageCreator = session -> session.createTextMessage(equation);
         jmsTemplate.setPubSubNoLocal(true);
         logger.info(String.format("Sending message with equation :%s",equation));
-        jmsTemplate.send("sum",messageCreator);
+        jmsTemplate.send(where,messageCreator);
     }
 }
