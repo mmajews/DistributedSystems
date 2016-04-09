@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 class MyRunner implements CommandLineRunner {
 
+    public static final int NUMBER_OF_SENDERS = 10;
     private Logger logger = Logger.getLogger(MyRunner.class);
 
     @Autowired
@@ -16,8 +17,8 @@ class MyRunner implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         logger.info("Program started!");
-        senderService.createSumSenders(10).stream().forEach(Thread::start);
-        senderService.createMultiplySenders(10).stream().forEach(Thread::start);
-        senderService.createDivideSenders(10).stream().forEach(Thread::start);
+        senderService.createSumSenders(NUMBER_OF_SENDERS).stream().forEach(Thread::start);
+        senderService.createMultiplySenders(NUMBER_OF_SENDERS).stream().forEach(Thread::start);
+        senderService.createDivideSenders(NUMBER_OF_SENDERS).stream().forEach(Thread::start);
     }
 }
