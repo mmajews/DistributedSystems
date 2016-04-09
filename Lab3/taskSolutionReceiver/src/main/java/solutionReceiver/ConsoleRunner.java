@@ -1,12 +1,12 @@
-package receiver;
+package solutionReceiver;
 
 import org.apache.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyRunner implements CommandLineRunner {
-    private Logger logger = Logger.getLogger(MyRunner.class);
+public class ConsoleRunner implements CommandLineRunner {
+    private Logger logger = Logger.getLogger(ConsoleRunner.class);
 
     @Override
     public void run(String... strings) throws Exception {

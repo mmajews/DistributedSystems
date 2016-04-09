@@ -6,10 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-class MyRunner implements CommandLineRunner {
+class ConsoleRunner implements CommandLineRunner {
 
-    public static final int NUMBER_OF_SENDERS = 10;
-    private Logger logger = Logger.getLogger(MyRunner.class);
+    private static final int NUMBER_OF_SENDERS = 10;
+    private Logger logger = Logger.getLogger(ConsoleRunner.class);
 
     @Autowired
     private TaskSendersService senderService;

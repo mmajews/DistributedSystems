@@ -1,5 +1,6 @@
 package solutionReceiver;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jms.annotation.EnableJms;
 
@@ -8,5 +9,6 @@ import org.springframework.jms.annotation.EnableJms;
 public class SolutionReceiverApplication {
 
     public static void main(String[] args) {
+        SpringApplication.run(SolutionReceiverApplication.class,args);
     }
 }

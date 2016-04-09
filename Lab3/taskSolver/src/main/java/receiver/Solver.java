@@ -1,18 +1,26 @@
 package receiver;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Component;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
+@Component
 class Solver implements MessageListener {
     private static final Logger logger = Logger.getLogger(Solver.class);
-    private final int idOfSolver;
+    private  int idOfSolver;
 
-    Solver(int i) {
+    private JmsTemplate jmsTemplate;
+
+    Solver(int i, JmsTemplate jmsTemplate) {
         idOfSolver = i;
+        this.jmsTemplate =jmsTemplate;
+    }
+
+    public Solver() {
     }
 
     @Override
@@ -21,30 +29,37 @@ class Solver implements MessageListener {
             try {
                 String receivedMessage = ((TextMessage) message).getText();
                 logger.info(String.format("Solver n%d. Received message : %s", idOfSolver, receivedMessage));
-                publishSolution(receivedMessage, String.valueOf(parseAndCount(receivedMessage)));
+                parseAndCount(receivedMessage);
             } catch (JMSException e) {
                 logger.error("Error while reading message", e);
             }
         }
     }
 
-    private double parseAndCount(String toParse){
+    private void parseAndCount(String toParse){
         String[] parsed = toParse.split("((?<=[/+\\*])|(?=[/+\\*]))");
         double firstNumber = Double.parseDouble(parsed[0]);
         double secondNumber = Double.parseDouble(parsed[2]);
+        double output =0;
+        String destination = "";
         switch (parsed[1]){
             case "*":
-                return firstNumber*secondNumber;
+                output= firstNumber*secondNumber;
+                destination = "multiply";
             case "/":
-                return firstNumber/secondNumber;
+                output= firstNumber/secondNumber;
+                destination = "divide";
             case "+":
-                return firstNumber+secondNumber;
-            //// FIXME: 09/04/16 support 0 as second parameter
+                output= firstNumber+secondNumber;
+                destination = "add";
         }
-        return 0;
-    }
 
-    private void publishSolution(String equation, String solution){
-        logger.info(String.format("Equation: %s=%s",equation,solution));
+        logger.info(String.format("Equation: %s=%f",toParse,output));
+        //Setting for topic
+        jmsTemplate.setPubSubDomain(true);
+        double finalOutput = output;
+        MessageCreator messageCreator = session -> session.createTextMessage(String.valueOf(finalOutput));
+        jmsTemplate.send(destination,messageCreator);
+
     }
 }
