@@ -9,10 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>taskReceiver</artifactId>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <artifactId>taskSolver</artifactId>
 
     <dependencies>
         <dependency>
@@ -28,15 +25,5 @@
             <artifactId>activemq-broker</artifactId>
         </dependency>
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

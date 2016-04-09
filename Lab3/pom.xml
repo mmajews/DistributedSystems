@@ -16,29 +16,33 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-jms.version>4.2.5.RELEASE</spring-jms.version>
+        <spring-boot-starter.version>1.3.3.RELEASE</spring-boot-starter.version>
+        <activemq-broker.version>5.13.2</activemq-broker.version>
     </properties>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.3.3.RELEASE</version>
-    </parent>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot-starter.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jms</artifactId>
+                <version>${spring-jms.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>activemq-broker</artifactId>
+                <version>${activemq-broker.version}</version>
             </dependency>
         </dependencies>
+
     </dependencyManagement>
 
 
