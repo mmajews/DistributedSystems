@@ -16,8 +16,7 @@ public class TaskSendersService {
     List<Thread> createSumSenders(int numberOfSenders){
         List<Thread> threadsToBeReturned = new ArrayList<>();
         for(int i= 0;i<numberOfSenders;i++){
-            int idOfThread = i;
-            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"+")));
+            threadsToBeReturned.add(new Thread(new Equation(i,senderService,"+")));
         }
         return threadsToBeReturned;
     }
@@ -25,8 +24,7 @@ public class TaskSendersService {
     List<Thread> createMultiplySenders(int numberOfSenders){
         List<Thread> threadsToBeReturned = new ArrayList<>();
         for(int i= 0;i<numberOfSenders;i++){
-            int idOfThread = i;
-            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"*")));
+            threadsToBeReturned.add(new Thread(new Equation(i,senderService,"*")));
         }
         return threadsToBeReturned;
     }
@@ -34,8 +32,7 @@ public class TaskSendersService {
     List<Thread> createDivideSenders(int numberOfSenders){
         List<Thread> threadsToBeReturned = new ArrayList<>();
         for(int i= 0;i<numberOfSenders;i++){
-            int idOfThread = i;
-            threadsToBeReturned.add(new Thread(new Equation(idOfThread,senderService,"/")));
+            threadsToBeReturned.add(new Thread(new Equation(i,senderService,"/")));
         }
         return threadsToBeReturned;
     }
