@@ -14,10 +14,10 @@ class SenderService {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-    void send(String where,String equation){
+    void sendToSolve(String equation){
         MessageCreator messageCreator = session -> session.createTextMessage(equation);
         jmsTemplate.setPubSubNoLocal(true);
         logger.info(String.format("Sending message with equation :%s",equation));
-        jmsTemplate.send(where,messageCreator);
+        jmsTemplate.send("solve",messageCreator);
     }
 }

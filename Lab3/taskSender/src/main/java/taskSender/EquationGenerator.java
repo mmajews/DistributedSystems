@@ -25,14 +25,7 @@ class EquationGenerator implements Runnable {
             try {
                 String equation = randomNumber() + equationMark + randomNumber();
                 logger.info(String.format("Thread number :%d sending equation: %s", idOfThread, equation));
-                switch (equationMark){
-                    case "+":
-                        senderService.send("sum",equation);
-                    case "*":
-                        senderService.send("multiply",equation);
-                    case "/":
-                        senderService.send("divide",equation);
-                }
+                senderService.sendToSolve(equation);
                 Thread.sleep(threadWaitingTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -40,9 +33,9 @@ class EquationGenerator implements Runnable {
         }
     }
 
-    private int randomNumber(){
+    private int randomNumber() {
         Random r = new Random();
         //noinspection OptionalGetWithoutIsPresent
-        return r.ints(1,0,100).findFirst().getAsInt();
+        return r.ints(1, 0, 100).findFirst().getAsInt();
     }
 }
