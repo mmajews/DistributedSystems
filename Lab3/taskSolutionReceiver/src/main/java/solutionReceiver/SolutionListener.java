@@ -7,12 +7,12 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-public class SolutionListener implements MessageListener {
+class SolutionListener implements MessageListener {
 
     private static final Logger logger = Logger.getLogger(SolutionListener.class);
     private final String typeOfListener;
 
-    public SolutionListener(String typeOflistener){
+    SolutionListener(String typeOflistener){
         this.typeOfListener = typeOflistener;
     }
 
