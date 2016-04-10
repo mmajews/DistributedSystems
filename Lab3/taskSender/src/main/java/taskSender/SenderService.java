@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 class SenderService {
 
-    private Logger logger = Logger.getLogger(SenderService.class);
+    private final Logger logger = Logger.getLogger(SenderService.class);
 
     @Autowired
     private JmsTemplate jmsTemplate;

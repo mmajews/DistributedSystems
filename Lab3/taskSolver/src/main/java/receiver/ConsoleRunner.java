@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ConsoleRunner implements CommandLineRunner {
-    private Logger logger = Logger.getLogger(ConsoleRunner.class);
+    private final Logger logger = Logger.getLogger(ConsoleRunner.class);
 
     @Override
     public void run(String... strings) throws Exception {

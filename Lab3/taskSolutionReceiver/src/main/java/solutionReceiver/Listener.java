@@ -23,7 +23,7 @@ public class Listener implements JmsListenerConfigurer {
         String[] topics = new String[]{"multiply","add","divide"};
         for(int i = 0; i<numberOfTopicReceivers;i++){
             SimpleJmsListenerEndpoint newListener = new SimpleJmsListenerEndpoint();
-            newListener.setMessageListener(new SolutionListener(topics[i%3]));
+            newListener.setMessageListener(new SolutionListener(topics[i % 3], i));
             newListener.setId(String.valueOf(i));
             newListener.setDestination(topics[i%3]);
             endpointRegistrar.registerEndpoint(newListener);

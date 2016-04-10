@@ -8,9 +8,9 @@ import java.util.Random;
 class EquationGenerator implements Runnable {
     private final static int threadWaitingTime = 10000;
     private final String equationMark;
-    private SenderService senderService;
-    private int idOfThread;
-    private static Logger logger = Logger.getLogger(EquationGenerator.class);
+    private final SenderService senderService;
+    private final int idOfThread;
+    private static final Logger logger = Logger.getLogger(EquationGenerator.class);
 
     EquationGenerator(int idOfThread, SenderService senderService, String equationMark) {
         this.senderService = senderService;

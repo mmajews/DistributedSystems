@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 class ConsoleRunner implements CommandLineRunner {
 
     private static final int NUMBER_OF_SENDERS = 10;
-    private Logger logger = Logger.getLogger(ConsoleRunner.class);
+    private final Logger logger = Logger.getLogger(ConsoleRunner.class);
 
     @Autowired
     private TaskSendersService senderService;

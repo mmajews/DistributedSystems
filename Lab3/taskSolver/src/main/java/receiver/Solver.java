@@ -1,26 +1,26 @@
 package receiver;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
-import org.springframework.stereotype.Component;
 
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
-@Component
 class Solver implements MessageListener {
     private static final Logger logger = Logger.getLogger(Solver.class);
-    private  int idOfSolver;
+    private int idOfSolver;
 
     private JmsTemplate jmsTemplate;
 
     Solver(int i, JmsTemplate jmsTemplate) {
         idOfSolver = i;
-        this.jmsTemplate =jmsTemplate;
+        this.jmsTemplate = jmsTemplate;
     }
 
-    public Solver() {
+    private Solver() {
     }
 
     @Override
@@ -36,30 +36,33 @@ class Solver implements MessageListener {
         }
     }
 
-    private void parseAndCount(String toParse){
+    private void parseAndCount(String toParse) {
         String[] parsed = toParse.split("((?<=[/+\\*])|(?=[/+\\*]))");
         double firstNumber = Double.parseDouble(parsed[0]);
         double secondNumber = Double.parseDouble(parsed[2]);
-        double output =0;
+        double output = 0;
         String destination = "";
-        switch (parsed[1]){
+        switch (parsed[1]) {
             case "*":
-                output= firstNumber*secondNumber;
+                output = firstNumber * secondNumber;
                 destination = "multiply";
+                break;
             case "/":
-                output= firstNumber/secondNumber;
+                output = firstNumber / secondNumber;
                 destination = "divide";
+                break;
             case "+":
-                output= firstNumber+secondNumber;
+                output = firstNumber + secondNumber;
                 destination = "add";
+                break;
         }
 
-        logger.info(String.format("Equation: %s=%f",toParse,output));
+        logger.info(String.format("Equation: %s=%f", toParse, output));
         //Setting for topic
         jmsTemplate.setPubSubDomain(true);
         double finalOutput = output;
-        MessageCreator messageCreator = session -> session.createTextMessage(String.valueOf(finalOutput));
-        jmsTemplate.send(destination,messageCreator);
+        MessageCreator messageCreator = session -> session.createTextMessage(String.format("%s=%f", toParse, finalOutput));
+        jmsTemplate.send(destination, messageCreator);
 
     }
 }
