@@ -7,6 +7,8 @@
 	cd $TEMP_FOLDER
 	find . -name '*.iml' -exec rm -r {} \;
 	find . -name '*.idea' -exec rm -r {} \; 
+	find . -name '*.git' -exec rm -r {} \; 
+	find . -name '*target' -exec rm -r {} \; 
 	cd ..
 	TAR_FILE="Majewski_Marcin_${1: -1}"
 	rm -rf $TEMP_FOLDER.tgz
