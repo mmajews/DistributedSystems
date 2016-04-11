@@ -20,9 +20,6 @@ class Solver implements MessageListener {
         this.jmsTemplate = jmsTemplate;
     }
 
-    private Solver() {
-    }
-
     @Override
     public void onMessage(Message message) {
         if (message instanceof TextMessage) {
