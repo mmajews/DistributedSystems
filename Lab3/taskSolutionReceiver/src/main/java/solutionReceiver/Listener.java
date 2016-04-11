@@ -20,12 +20,12 @@ public class Listener implements JmsListenerConfigurer {
 
     @Override
     public void configureJmsListeners(JmsListenerEndpointRegistrar endpointRegistrar) {
-        String[] topics = new String[]{"multiply","add","divide"};
-        for(int i = 0; i<numberOfTopicReceivers;i++){
+        String[] topics = new String[]{"multiply", "add", "divide"};
+        for (int i = 0; i < numberOfTopicReceivers; i++) {
             SimpleJmsListenerEndpoint newListener = new SimpleJmsListenerEndpoint();
             newListener.setMessageListener(new SolutionListener(topics[i % 3], i));
             newListener.setId(String.valueOf(i));
-            newListener.setDestination(topics[i%3]);
+            newListener.setDestination(topics[i % 3]);
             endpointRegistrar.registerEndpoint(newListener);
         }
     }

@@ -28,7 +28,7 @@ class EquationGenerator implements Runnable {
                 senderService.sendToSolve(equation);
                 Thread.sleep(threadWaitingTime);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.error("Error occurred while execution of equation generator", e);
             }
         }
     }
@@ -36,6 +36,6 @@ class EquationGenerator implements Runnable {
     private int randomNumber() {
         Random r = new Random();
         //noinspection OptionalGetWithoutIsPresent
-        return r.ints(1, 0, 100).findFirst().getAsInt();
+        return r.ints(1, 1, 100).findFirst().getAsInt();
     }
 }
