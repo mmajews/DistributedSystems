@@ -3,6 +3,14 @@ version '1.0-SNAPSHOT'
 
 apply plugin : 'java'
 
+sourceSets {
+    main {
+        java {
+            srcDir 'slice'
+        }
+    }
+}
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -36,7 +44,7 @@ task slice(type: Exec){
 }
 
 gradle.projectsEvaluated {
-    compileJava.dependsOn(compileSlice)
+    compileJava.dependsOn(slice)
 }
 
 String getRuntimeClasspath() {
