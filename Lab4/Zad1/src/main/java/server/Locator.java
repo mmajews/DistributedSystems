@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 public class Locator implements Ice.ServantLocator {
     private static Logger logger = Logger.getLogger(Locator.class);
 
-    String id;
+    protected String id;
 
     public Locator(String id) {
         this.id = id;

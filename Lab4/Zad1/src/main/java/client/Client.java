@@ -4,7 +4,6 @@ import Zad1.IEchoPrx;
 import Zad1.IEchoPrxHelper;
 import com.google.common.base.Preconditions;
 import org.apache.log4j.Logger;
-import org.apache.log4j.net.SyslogAppender;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class Client {
         Ice.Communicator communicator;
 
         communicator = Ice.Util.initialize(args);
-        final String proxyConfString = "c3/o1:tcp -h localhost -p 10000:udp -h localhost";
+        final String proxyConfString = "c5/o1:tcp -h localhost -p 10000:udp -h localhost";
         Ice.ObjectPrx base = communicator.stringToProxy(proxyConfString);
 
         IEchoPrx echo = IEchoPrxHelper.checkedCast(base);

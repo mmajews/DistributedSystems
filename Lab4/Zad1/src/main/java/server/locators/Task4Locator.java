@@ -13,6 +13,7 @@ public class Task4Locator extends server.Locator {
 
     public Task4Locator(String id) {
         super(id);
+        logger.debug(String.format("Task4Locator created with id: %s", id));
     }
 
     @Override

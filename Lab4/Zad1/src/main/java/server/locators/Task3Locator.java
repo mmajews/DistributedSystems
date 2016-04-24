@@ -21,7 +21,7 @@ public class Task3Locator extends Locator {
 
     public Task3Locator(String id) {
         super(id);
-        logger.info("Task3Locator created with id " + id);
+        logger.info("Task3Locator created with id: " + id);
         Preconditions.checkArgument(numberOfServants > 0, "Number of servants must be more than 0");
     }
 
