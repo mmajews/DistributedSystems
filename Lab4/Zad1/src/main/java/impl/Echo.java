@@ -5,7 +5,7 @@ import Ice.Current;
 import Zad1._IEchoDisp;
 
 public class Echo extends _IEchoDisp {
-    private String text = "inital_text";
+    private String text = "";
 
     @Override
     public String removeLastLetter(Current __current) {

@@ -4,11 +4,15 @@ import Ice.Current;
 import Ice.LocalObjectHolder;
 import Ice.Object;
 import Ice.UserException;
+import org.apache.log4j.Logger;
 
-public class Task5Locator extends Locator {
+class Task5Locator extends Locator {
 
-    public Task5Locator(String id) {
+    private static final Logger logger = Logger.getLogger(Task5Locator.class);
+
+    Task5Locator(String id) {
         super(id);
+        logger.debug(String.format("Creating Task5Locator with id: %s",id));
     }
 
     @Override
