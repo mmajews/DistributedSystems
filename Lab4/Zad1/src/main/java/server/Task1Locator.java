@@ -27,7 +27,7 @@ class Task1Locator extends Locator {
 
 
     @Override
-    public Object locate(Current current, LocalObjectHolder localObjectHolder) throws UserException {
+    public synchronized Object locate(Current current, LocalObjectHolder localObjectHolder) throws UserException {
         logger.debug("Invoking locate() on " + id);
         Object servant = objectAdapter.find(current.id);
         if (servant == null) {

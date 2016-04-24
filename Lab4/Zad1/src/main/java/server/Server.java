@@ -23,6 +23,8 @@ public class Server {
             adapter.addServantLocator(new Task1Locator("t1", adapter), "c1");
             adapter.addServantLocator(new Task2Locator("t2"),"c2");
             adapter.addServantLocator(new Task3Locator("t3"),"c3");
+            adapter.addServantLocator(new Task4Locator("t4"),"c4");
+            adapter.addServantLocator(new Task5Locator("t5"),"c5");
             adapter.activate();
 
             logger.info("Entering processing loop...");
