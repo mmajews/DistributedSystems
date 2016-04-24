@@ -1,14 +1,16 @@
 package server;
 
-import Ice.*;
+import Ice.Current;
+import Ice.LocalObjectHolder;
 import Ice.Object;
+import Ice.UserException;
 import com.google.common.base.Preconditions;
 import impl.Echo;
 import org.apache.log4j.Logger;
-import org.apache.log4j.net.SyslogAppender;
 
-import java.util.*;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 class Task3Locator extends Locator {
     private static final Logger logger = Logger.getLogger(Task3Locator.class);
