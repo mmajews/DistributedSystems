@@ -7,7 +7,7 @@ public class Server {
     private static Logger logger = Logger.getLogger(Server.class);
 
     private void serverStart(){
-        logger.info("serverStart() method invoked");
+        logger.debug("serverStart() method invoked");
         int status = 0;
         Ice.Communicator communicator = null;
     }

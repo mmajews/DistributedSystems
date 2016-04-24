@@ -33,7 +33,8 @@ task slice(type: Exec){
     def generatedSourceDir = new File(sliceSourcesDirectory);
     def iceLocation = "${projectDir}/src/main/slice/Zad1.ice";
 
-    generatedSourceDir.mkdirs();
+    delete sliceSourcesDirectory
+    generatedSourceDir.mkdirs()
     commandLine 'slice2java', '--output-dir', sliceSourcesDirectory, iceLocation
 
     standardOutput = new ByteArrayOutputStream()
