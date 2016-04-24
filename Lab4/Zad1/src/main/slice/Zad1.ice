@@ -1,6 +1,6 @@
 module Zad1
 {
-    interface Echo{
+    interface IEcho{
         string echo(string text);
     };
 };

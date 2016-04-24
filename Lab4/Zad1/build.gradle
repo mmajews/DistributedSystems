@@ -1,6 +1,8 @@
 group 'Zad1'
 version '1.0-SNAPSHOT'
 
+apply plugin : 'java'
+
 sourceCompatibility = 1.8
 
 repositories {
@@ -16,4 +18,27 @@ dependencies {
     compile 'com.zeroc:icestorm:3.6.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     compile 'log4j:log4j:1.2.17'
+}
+
+task slice(type: Exec){
+    def sliceSourcesDirectory = "${projectDir}/slice";
+    def generatedSourceDir = new File(sliceSourcesDirectory);
+    def iceLocation = "${projectDir}/src/main/slice/Zad1.ice";
+
+    generatedSourceDir.mkdirs();
+    commandLine 'slice2java', '--output-dir', sliceSourcesDirectory, iceLocation
+
+    standardOutput = new ByteArrayOutputStream()
+
+    ext.output = {
+        println standardOutput.toString()
+    }
+}
+
+gradle.projectsEvaluated {
+    compileJava.dependsOn(compileSlice)
+}
+
+String getRuntimeClasspath() {
+    sourceSets.main.runtimeClasspath.collect { it.absolutePath }.join(':')
 }
