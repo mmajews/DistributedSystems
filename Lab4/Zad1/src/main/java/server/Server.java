@@ -1,5 +1,6 @@
 package server;
 
+import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import impl.Echo;
@@ -9,21 +10,40 @@ public class Server {
 
     private static Logger logger = Logger.getLogger(Server.class);
 
-    private void serverStart() {
-        logger.debug("serverStart() method invoked");
-        int status = 0;
+    private void serverStart(String[] args) {
         Ice.Communicator communicator = null;
+        try {
+            logger.debug("serverStart() method invoked");
+            communicator = Ice.Util.initialize(args);
+            final String connProp = "tcp -h localhost -p 10000:udp -h localhost -p 10000";
 
-        Echo echo = new Echo();
-        Gson gson = new GsonBuilder().create();
-        System.out.println(gson.toJson(echo));
+            Preconditions.checkNotNull(communicator, "Communicator must not be null!");
 
+            Ice.ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Apr1", connProp);
+            adapter.addServantLocator(new Task1Locator("t1", adapter), "c1");
+            adapter.activate();
+
+            logger.info("Entering processing loop...");
+            communicator.waitForShutdown();
+        } catch (Exception e) {
+            logger.error("Error while starting server. Exiting..", e);
+            System.exit(1);
+        } finally {
+            try {
+                if (communicator != null) {
+                    communicator.destroy();
+                }
+            } catch (Exception e) {
+                logger.error("Error while detroying communicator", e);
+                System.exit(1);
+            }
+        }
     }
 
 
     public static void main(String[] args) {
         logger.info("Starting server...");
         Server server = new Server();
-        server.serverStart();
+        server.serverStart(args);
     }
 }
