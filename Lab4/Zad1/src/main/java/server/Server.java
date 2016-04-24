@@ -1,10 +1,8 @@
 package server;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import impl.Echo;
 import org.apache.log4j.Logger;
+import server.locators.*;
 
 public class Server {
 

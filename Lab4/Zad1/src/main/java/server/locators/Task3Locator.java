@@ -1,4 +1,4 @@
-package server;
+package server.locators;
 
 import Ice.Current;
 import Ice.LocalObjectHolder;
@@ -7,18 +7,19 @@ import Ice.UserException;
 import com.google.common.base.Preconditions;
 import impl.Echo;
 import org.apache.log4j.Logger;
+import server.Locator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-class Task3Locator extends Locator {
+public class Task3Locator extends Locator {
     private static final Logger logger = Logger.getLogger(Task3Locator.class);
     private static final int numberOfServants = 10;
     private List<Echo> servants = new ArrayList<>();
     private boolean initialized = false;
 
-    Task3Locator(String id) {
+    public Task3Locator(String id) {
         super(id);
         logger.info("Task3Locator created with id " + id);
         Preconditions.checkArgument(numberOfServants > 0, "Number of servants must be more than 0");

@@ -1,4 +1,4 @@
-package server;
+package server.locators;
 
 import Ice.*;
 import Ice.Object;
@@ -13,13 +13,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-class Task1Locator extends Locator {
+public class Task1Locator extends server.Locator {
     private static final Logger logger = Logger.getLogger(Task1Locator.class);
     private final ObjectAdapter objectAdapter;
     private static final Gson gson = new GsonBuilder().create();
     private static final String fileName = "src/main/resources/savedState.json";
 
-    Task1Locator(String id, ObjectAdapter objectAdapter) {
+    public Task1Locator(String id, ObjectAdapter objectAdapter) {
         super(id);
         this.objectAdapter = objectAdapter;
         logger.info(String.format("Task1Locator created with id: %s", id));

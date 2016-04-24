@@ -1,15 +1,17 @@
-package server;
+package server.locators;
 
-import Ice.*;
+import Ice.Current;
+import Ice.LocalObjectHolder;
 import Ice.Object;
+import Ice.UserException;
 import impl.Echo;
 import org.apache.log4j.Logger;
 
-class Task4Locator extends Locator{
+public class Task4Locator extends server.Locator {
     private static final Logger logger = Logger.getLogger(Task4Locator.class);
     private Echo echo;
 
-    Task4Locator(String id) {
+    public Task4Locator(String id) {
         super(id);
     }
 
