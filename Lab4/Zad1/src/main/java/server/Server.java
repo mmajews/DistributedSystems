@@ -21,6 +21,7 @@ public class Server {
 
             Ice.ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Apr1", connProp);
             adapter.addServantLocator(new Task1Locator("t1", adapter), "c1");
+            adapter.addServantLocator(new Task2Locator("t2"),"c2");
             adapter.activate();
 
             logger.info("Entering processing loop...");

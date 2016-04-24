@@ -22,7 +22,7 @@ public class Task1Locator extends Locator {
     public Task1Locator(String id, ObjectAdapter objectAdapter) {
         super(id);
         this.objectAdapter = objectAdapter;
-        logger.info(String.format("Task1Locator with id: %s started", id));
+        logger.info(String.format("Task1Locator created with id: %s", id));
     }
 
 
