@@ -19,7 +19,7 @@ public class Client {
         Ice.Communicator communicator;
 
         communicator = Ice.Util.initialize(args);
-        final String proxyConfString = "c2/o1:tcp -h localhost -p 10000:udp -h localhost";
+        final String proxyConfString = "c3/o1:tcp -h localhost -p 10000:udp -h localhost";
         Ice.ObjectPrx base = communicator.stringToProxy(proxyConfString);
 
         IEchoPrx echo = IEchoPrxHelper.checkedCast(base);
