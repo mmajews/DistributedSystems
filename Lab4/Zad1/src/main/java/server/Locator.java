@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 public class Locator implements Ice.ServantLocator {
     private static Logger logger = Logger.getLogger(Locator.class);
 
-    private String id;
+    String id;
 
     public Locator(String id) {
         this.id = id;
@@ -22,12 +22,12 @@ public class Locator implements Ice.ServantLocator {
 
     @Override
     public void finished(Current current, Object object, java.lang.Object o) throws UserException {
-        logger.info("## ServantLocator1 #" + id + " .finished() ##");
+        logger.info("ServantLocator1 " + id + " .finished()");
     }
 
 
     @Override
     public void deactivate(String s) {
-        logger.info("## ServantLocator1 #" + id + " .deactivate() ##");
+        logger.info("ServantLocator1 " + id + " .deactivate()");
     }
 }

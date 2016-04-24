@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.Exception;
 
 public class Task1Locator extends Locator {
     private static final Logger logger = Logger.getLogger(Task1Locator.class);
@@ -29,6 +28,7 @@ public class Task1Locator extends Locator {
 
     @Override
     public Object locate(Current current, LocalObjectHolder localObjectHolder) throws UserException {
+        logger.debug("Invoking locate() on " + id);
         Object servant = objectAdapter.find(current.id);
         if (servant == null) {
             Echo echo = null;
