@@ -32,6 +32,7 @@ public class Task5Locator extends EvictorBase {
 
     @Override
     public Object add(Current c, LocalObjectHolder cookie) {
+        cookie.value = c;
         return new Echo();
     }
 
