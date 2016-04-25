@@ -5,7 +5,13 @@ import org.apache.log4j.Logger;
 import server.locators.*;
 
 public class Server {
-
+    /*
+	1: lazy initialization
+	2: nowy serwant dla każdego uzycia, jakieś obliczenie co długo trwa
+	3: balansowanie obciążenia
+	4: jeden servant dla wielu uczestników
+	5: ograncziona pamiec i koniecznosc zapisywania dawno nie uzytych servantów do pliku
+	*/
     private static Logger logger = Logger.getLogger(Server.class);
 
     private void serverStart(String[] args) {
