@@ -19,9 +19,16 @@ public class Client {
 
         communicator = Ice.Util.initialize(args);
         final String proxyConfString = "c5/o1:tcp -h localhost -p 10000:udp -h localhost";
+        final String proxyConfString1 = "c5/o2:tcp -h localhost -p 10000:udp -h localhost";
+        final String proxyConfString2 = "c5/o3:tcp -h localhost -p 10000:udp -h localhost";
         Ice.ObjectPrx base = communicator.stringToProxy(proxyConfString);
+        Ice.ObjectPrx base1 = communicator.stringToProxy(proxyConfString1);
+        Ice.ObjectPrx base2 = communicator.stringToProxy(proxyConfString2);
 
         IEchoPrx echo = IEchoPrxHelper.checkedCast(base);
+        IEchoPrx echo1 = IEchoPrxHelper.checkedCast(base1);
+        IEchoPrx echo2 = IEchoPrxHelper.checkedCast(base2);
+
         Preconditions.checkNotNull(echo,"Echo should not be null!");
 
         logger.info("Initialization completed!");
@@ -41,6 +48,8 @@ public class Client {
                 }
                 if (line.equals("append")){
                     String str = echo.appendString("Appended");
+                    echo1.appendString("Append");
+                    echo2.appendString("append");
                     System.out.println(String.format("Result %s", str));
                 }
                 if(line.equals("remove")){
