@@ -10,7 +10,7 @@ public class MessageReceiver extends ReceiverAdapter {
 	private final String nickname;
 	private final String channelName;
 
-	public MessageReceiver(String nickname, String channelName) {
+	public MessageReceiver(String channelName, String nickname) {
 		this.nickname = nickname;
 		this.channelName = channelName;
 	}
@@ -20,7 +20,7 @@ public class MessageReceiver extends ReceiverAdapter {
 		String messageAsString = (String) msg.getObject();
 
 		if (!senderName.equals(nickname)) {
-			logger.info("Received message from: {} at channel: {} with text:\n {}", senderName,channelName, messageAsString);
+			logger.info("Received message from: {} at channel: {} with text: \"{}\"", senderName,channelName, messageAsString);
 		}
 	}
 }

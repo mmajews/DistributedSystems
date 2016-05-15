@@ -9,10 +9,10 @@
         <Root level="TRACE">
             <AppenderRef ref="CONSOLE" />
         </Root>
-        <Logger name="org.jgroups.protocols" level="INFO">
+        <Logger name="org.jgroups.protocols" level="ERROR">
             <AppenderRef ref="CONSOLE" />
         </Logger>
-        <Logger name="org.jgroups.stack.Configurator" level="INFO">
+        <Logger name="org.jgroups.stack.Configurator" level="ERROR">
             <AppenderRef ref="CONSOLE" />
         </Logger>
     </Loggers>
