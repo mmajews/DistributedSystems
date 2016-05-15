@@ -1,3 +1,4 @@
+import core.State;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,7 @@ class Starter{
 		System.out.println("Enter your name: ");
 		String enteredName = scanner.nextLine();
 		logger.trace("Entered name: {}", enteredName);
-		Chat chat = new Chat(enteredName);
+		State state = new State();
+		Chat chat = new Chat(enteredName, state);
 	}
 }

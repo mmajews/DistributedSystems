@@ -12,5 +12,8 @@
         <Logger name="org.jgroups.protocols" level="INFO">
             <AppenderRef ref="CONSOLE" />
         </Logger>
+        <Logger name="org.jgroups.stack.Configurator" level="INFO">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
     </Loggers>
 </Configuration>
