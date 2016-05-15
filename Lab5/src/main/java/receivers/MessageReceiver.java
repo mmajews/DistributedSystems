@@ -16,11 +16,12 @@ public class MessageReceiver extends ReceiverAdapter {
 	}
 
 	@Override public void receive(Message msg) {
-		String senderName = msg.getSrc().toString();
-		String messageAsString = (String) msg.getObject();
+		String sendName = msg.getSrc().toString();
+		String msgRecv = (String) msg.getObject();
 
-		if (!senderName.equals(nickname)) {
-			logger.info("Received message from: {} at channel: {} with text: \"{}\"", senderName,channelName, messageAsString);
+		if (!sendName.equals(nickname)) {
+			String toShow = String.format("Received message from: %s on channel: %s Message: %s", sendName, channelName, msgRecv);
+			System.out.println(toShow);
 		}
 	}
 }
