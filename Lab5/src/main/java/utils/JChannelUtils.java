@@ -3,7 +3,6 @@ package utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jgroups.JChannel;
-import org.jgroups.Receiver;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.protocols.BARRIER;
 import org.jgroups.protocols.FD_ALL;
@@ -22,8 +21,6 @@ import org.jgroups.protocols.pbcast.NAKACK;
 import org.jgroups.protocols.pbcast.STABLE;
 import org.jgroups.protocols.pbcast.STATE_TRANSFER;
 import org.jgroups.stack.ProtocolStack;
-import pl.edu.agh.dsrg.sr.chat.protos.ChatOperationProtos;
-import receivers.MessageReceiver;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

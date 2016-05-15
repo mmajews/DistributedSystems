@@ -20,7 +20,7 @@ public class ChannelWithUsers {
 		return this.users;
 	}
 
-	public void removeUser(String nickname) {
+	void removeUser(String nickname) {
 		for (User user : users) {
 			if (user.getName().equals(nickname)) {
 				users.remove(user);
@@ -32,9 +32,4 @@ public class ChannelWithUsers {
 		this.users.add(new User(nickname));
 	}
 
-	@Override
-	public String toString() {
-		//todo
-		return "";
-	}
 }

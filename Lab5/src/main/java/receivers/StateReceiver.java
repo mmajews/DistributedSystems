@@ -3,6 +3,8 @@ package receivers;
 import core.ChannelWithUsers;
 import core.State;
 import core.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jgroups.Address;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
@@ -16,9 +18,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class StateReceiver extends ReceiverAdapter {
 	private State chatState;
+	private static final Logger logger = LogManager.getLogger(StateReceiver.class);
 
 	public StateReceiver(State state) {
 		this.chatState = state;
@@ -32,7 +36,7 @@ public class StateReceiver extends ReceiverAdapter {
 	@Override
 	public void viewAccepted(View newView) {
 		super.viewAccepted(newView);
-		System.out.println("Users available in cluster: " + newView);
+		logger.info("Users available in cluster: {}", newView);
 		chatState.updateConnectedUsers(getUsersFromView(newView));
 	}
 
@@ -87,11 +91,11 @@ public class StateReceiver extends ReceiverAdapter {
 	}
 
 	private List<String> getUsersFromView(View view) {
-		List<String> currentlyConnectedUsers = new CopyOnWriteArrayList<>();
-		for (Address member : view.getMembers()) {
-			currentlyConnectedUsers.add(member.toString());
-		}
-		return currentlyConnectedUsers;
+		return view
+				.getMembers()
+				.stream()
+				.map(Object::toString)
+				.collect(Collectors.toCollection(CopyOnWriteArrayList::new));
 	}
 
 	private void updateChatStateFromChatAction(ChatOperationProtos.ChatAction action) {

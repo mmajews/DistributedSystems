@@ -15,7 +15,8 @@ public class MessageReceiver extends ReceiverAdapter {
 		this.channelName = channelName;
 	}
 
-	@Override public void receive(Message msg) {
+	@Override
+	public void receive(Message msg) {
 		String sendName = msg.getSrc().toString();
 		String msgRecv = (String) msg.getObject();
 

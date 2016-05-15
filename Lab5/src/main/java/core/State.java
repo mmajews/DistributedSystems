@@ -62,7 +62,7 @@ public class State {
 
 	@Override
 	public String toString() {
-		String stateAsString = ""; //todo: obslugiwac poprawnie toString w Channel i User
+		String stateAsString = "";
 		stateAsString += "Currently available channels:\n";
 		for(ChannelWithUsers channel : channels) {
 			stateAsString += "- " + channel.getName() + ": ";

@@ -12,6 +12,9 @@
         <Logger name="org.jgroups.protocols" level="ERROR">
             <AppenderRef ref="CONSOLE" />
         </Logger>
+        <Logger name="utils.JChannelUtils" level="ERROR">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
         <Logger name="org.jgroups.stack.Configurator" level="ERROR">
             <AppenderRef ref="CONSOLE" />
         </Logger>
