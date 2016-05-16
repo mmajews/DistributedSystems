@@ -21,7 +21,7 @@ public class MessageReceiver extends ReceiverAdapter {
 		String msgRecv = (String) msg.getObject();
 
 		if (!sendName.equals(nickname)) {
-			String toShow = String.format("Received message from: %s on channel: %s Message: %s", sendName, channelName, msgRecv);
+			String toShow = String.format("Received message from: %s on channel: %s Message: \"%s\"", sendName, channelName, msgRecv);
 			System.out.println(toShow);
 		}
 	}
