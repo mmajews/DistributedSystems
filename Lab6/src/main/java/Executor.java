@@ -21,6 +21,7 @@ class Executor implements Watcher, Runnable, DataMonitorListener {
 		int sessionTimeout = 3000;
 		zooKeeper = new ZooKeeper(LOCALHOST_ADDRESS + ":" + port, sessionTimeout, this);
 		dataMonitor = new DataMonitor(zooKeeper, znode, null, this);
+		dataMonitor.initChildrenGet();
 	}
 
 	public void process(WatchedEvent event) {

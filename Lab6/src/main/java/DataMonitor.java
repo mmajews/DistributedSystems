@@ -25,12 +25,26 @@ class DataMonitor implements Watcher, StatCallback {
 		this.znode = znode;
 		this.chainedWatcher = chainedWatcher;
 		this.listener = listener;
-		zooKeeper.register(this);
 		zooKeeper.exists(znode, true, this, null);
+	}
+
+	void initChildrenGet() {
+		try {
+			zooKeeper.getChildren(znode, this);
+		} catch (Exception ex) {
+			logger.error("Error while getting children", ex);
+		}
 	}
 
 	public void process(WatchedEvent event) {
 		String path = event.getPath();
+		if (event.getType() == Event.EventType.NodeChildrenChanged) {
+			try {
+				ls(znode);
+			} catch (Exception ex) {
+				logger.error("Error while printing out nodes", ex);
+			}
+		}
 		if (event.getType() == Event.EventType.None) {
 			switch (event.getState()) {
 			case SyncConnected:
@@ -86,8 +100,7 @@ class DataMonitor implements Watcher, StatCallback {
 		}
 	}
 
-	public void ls(String groupName) throws KeeperException, InterruptedException {
-		String path = "/" + groupName;
+	private void ls(String path) throws KeeperException, InterruptedException {
 		try {
 			List<String> children = zooKeeper.getChildren(path, false);
 			for (String child : children) {
@@ -97,6 +110,7 @@ class DataMonitor implements Watcher, StatCallback {
 			logger.error("Group doest not exist, e");
 			System.exit(1);
 		}
+		initChildrenGet();
 	}
 
 }
