@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 class DataMonitor implements Watcher, StatCallback {
 
-	private ZooKeeper zk;
+	private ZooKeeper zooKeeper;
 
 	private String znode;
 
@@ -22,13 +22,12 @@ class DataMonitor implements Watcher, StatCallback {
 
 	private byte prevData[];
 
-	DataMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher,
-			DataMonitorListener listener) {
-		this.zk = zk;
+	DataMonitor(ZooKeeper zooKeeper, String znode, Watcher chainedWatcher, DataMonitorListener listener) {
+		this.zooKeeper = zooKeeper;
 		this.znode = znode;
 		this.chainedWatcher = chainedWatcher;
 		this.listener = listener;
-		zk.exists(znode, true, this, null);
+		zooKeeper.exists(znode, true, this, null);
 	}
 
 	public void process(WatchedEvent event) {
@@ -52,7 +51,7 @@ class DataMonitor implements Watcher, StatCallback {
 		} else {
 			if (path != null && path.equals(znode)) {
 				// Something has changed on the node, let's find out
-				zk.exists(znode, true, this, null);
+				zooKeeper.exists(znode, true, this, null);
 			}
 		}
 		if (chainedWatcher != null) {
@@ -76,14 +75,14 @@ class DataMonitor implements Watcher, StatCallback {
 			return;
 		default:
 			// Retry errors
-			zk.exists(znode, true, this, null);
+			zooKeeper.exists(znode, true, this, null);
 			return;
 		}
 
 		byte b[] = null;
 		if (exists) {
 			try {
-				b = zk.getData(znode, false, null);
+				b = zooKeeper.getData(znode, false, null);
 			} catch (KeeperException e) {
 				// We don't need to worry about recovering now. The watch
 				// callbacks will kick off any exception handling
