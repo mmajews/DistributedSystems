@@ -40,7 +40,7 @@ class DataMonitor implements Watcher, StatCallback {
 		String path = event.getPath();
 		if (event.getType() == Event.EventType.NodeChildrenChanged) {
 			try {
-				ls(znode);
+				count(znode);
 			} catch (Exception ex) {
 				logger.error("Error while printing out nodes", ex);
 			}
@@ -98,6 +98,17 @@ class DataMonitor implements Watcher, StatCallback {
 			listener.exists(b);
 			prevData = b;
 		}
+	}
+
+	private void count(String path) throws KeeperException, InterruptedException {
+		try {
+			List<String> children = zooKeeper.getChildren(path, false);
+			System.out.println(children.size());
+		} catch (KeeperException.NoNodeException e) {
+			logger.error("Group doest not exist, e");
+			System.exit(1);
+		}
+		initChildrenGet();
 	}
 
 	private void ls(String path) throws KeeperException, InterruptedException {
