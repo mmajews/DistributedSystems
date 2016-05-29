@@ -1,3 +1,4 @@
+import org.apache.log4j.Logger;
 import org.apache.zookeeper.AsyncCallback.StatCallback;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.Code;
@@ -7,20 +8,17 @@ import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 
 import java.util.Arrays;
+import java.util.List;
 
 class DataMonitor implements Watcher, StatCallback {
 
-	private ZooKeeper zooKeeper;
-
-	private String znode;
-
-	private Watcher chainedWatcher;
-
 	boolean dead;
-
+	private ZooKeeper zooKeeper;
+	private String znode;
+	private Watcher chainedWatcher;
 	private DataMonitorListener listener;
-
 	private byte prevData[];
+	private static final Logger logger = Logger.getLogger(DataMonitor.class);
 
 	DataMonitor(ZooKeeper zooKeeper, String znode, Watcher chainedWatcher, DataMonitorListener listener) {
 		this.zooKeeper = zooKeeper;
@@ -33,24 +31,16 @@ class DataMonitor implements Watcher, StatCallback {
 	public void process(WatchedEvent event) {
 		String path = event.getPath();
 		if (event.getType() == Event.EventType.None) {
-			// We are are being told that the state of the
-			// connection has changed
 			switch (event.getState()) {
 			case SyncConnected:
-				// In this particular example we don't need to do anything
-				// here - watches are automatically re-registered with
-				// server and any watches triggered while the client was
-				// disconnected will be delivered (in order of course)
 				break;
 			case Expired:
-				// It's all over
 				dead = true;
 				listener.closing(KeeperException.Code.SessionExpired);
 				break;
 			}
 		} else {
 			if (path != null && path.equals(znode)) {
-				// Something has changed on the node, let's find out
 				zooKeeper.exists(znode, true, this, null);
 			}
 		}
@@ -95,6 +85,19 @@ class DataMonitor implements Watcher, StatCallback {
 				|| (b != null && !Arrays.equals(prevData, b))) {
 			listener.exists(b);
 			prevData = b;
+		}
+	}
+
+	public void ls(String groupName) throws KeeperException, InterruptedException {
+		String path = "/" + groupName;
+		try {
+			List<String> children = zooKeeper.getChildren(path, false);
+			for (String child : children) {
+				System.out.println(path + "/" + child + zooKeeper.getChildren(path + "/" + child, false));
+			}
+		} catch (KeeperException.NoNodeException e) {
+			logger.error("Group doest not exist, e");
+			System.exit(1);
 		}
 	}
 }
