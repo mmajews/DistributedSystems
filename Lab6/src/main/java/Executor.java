@@ -8,11 +8,9 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class Executor implements Watcher, Runnable, DataMonitorListener {
-	public static final String LOCALHOST_ADDRESS = "127.0.0.1";
+	private static final String LOCALHOST_ADDRESS = "127.0.0.1";
 	private static final Logger logger = Logger.getLogger(Executor.class);
 
 	private String znode;
@@ -106,35 +104,10 @@ public class Executor implements Watcher, Runnable, DataMonitorListener {
 			try {
 				System.out.println("Starting child");
 				child = Runtime.getRuntime().exec(exec);
-				new StreamWriter(child.getInputStream(), System.out);
-				new StreamWriter(child.getErrorStream(), System.err);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private static class StreamWriter extends Thread {
-		private OutputStream os;
-
-		private InputStream is;
-
-		StreamWriter(InputStream is, OutputStream os) {
-			this.is = is;
-			this.os = os;
-			start();
-		}
-
-		public void run() {
-			byte b[] = new byte[80];
-			int rc;
-			try {
-				while ((rc = is.read(b)) > 0) {
-					os.write(b, 0, rc);
-				}
-			} catch (IOException e) {
-			}
-
-		}
-	}
 }
