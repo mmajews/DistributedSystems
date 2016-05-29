@@ -30,8 +30,7 @@ public class Executor implements Watcher, Runnable, DataMonitorListener {
 
 	public static void main(String[] args) {
 		if (args.length < 4) {
-			System.err
-					.println("USAGE: Executor hostPort znode filename program [args ...]");
+			System.err.println("USAGE: Executor hostPort znode filename program [args ...]");
 			System.exit(2);
 		}
 		String hostPort = args[0];

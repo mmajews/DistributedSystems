@@ -10,17 +10,17 @@ import java.util.Arrays;
 
 class DataMonitor implements Watcher, StatCallback {
 
-	ZooKeeper zk;
+	private ZooKeeper zk;
 
-	String znode;
+	private String znode;
 
-	Watcher chainedWatcher;
+	private Watcher chainedWatcher;
 
 	boolean dead;
 
-	DataMonitorListener listener;
+	private DataMonitorListener listener;
 
-	byte prevData[];
+	private byte prevData[];
 
 	DataMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher,
 			DataMonitorListener listener) {
