@@ -25,6 +25,7 @@ class DataMonitor implements Watcher, StatCallback {
 		this.znode = znode;
 		this.chainedWatcher = chainedWatcher;
 		this.listener = listener;
+		zooKeeper.register(this);
 		zooKeeper.exists(znode, true, this, null);
 	}
 
@@ -64,7 +65,6 @@ class DataMonitor implements Watcher, StatCallback {
 			listener.closing(rc);
 			return;
 		default:
-			// Retry errors
 			zooKeeper.exists(znode, true, this, null);
 			return;
 		}
@@ -74,8 +74,6 @@ class DataMonitor implements Watcher, StatCallback {
 			try {
 				b = zooKeeper.getData(znode, false, null);
 			} catch (KeeperException e) {
-				// We don't need to worry about recovering now. The watch
-				// callbacks will kick off any exception handling
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				return;
@@ -100,4 +98,5 @@ class DataMonitor implements Watcher, StatCallback {
 			System.exit(1);
 		}
 	}
+
 }
