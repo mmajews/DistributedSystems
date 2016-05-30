@@ -93,8 +93,7 @@ class DataMonitor implements Watcher, StatCallback {
 				return;
 			}
 		}
-		if ((b == null && b != prevData)
-				|| (b != null && !Arrays.equals(prevData, b))) {
+		if ((b == null && null != prevData) || (b != null && !Arrays.equals(prevData, b))) {
 			listener.exists(b);
 			prevData = b;
 		}
