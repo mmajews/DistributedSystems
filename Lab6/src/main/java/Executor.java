@@ -18,7 +18,8 @@ class Executor implements Watcher, Runnable, DataMonitorListener {
 
 	Executor(String port, String znode, String exec[]) throws KeeperException, IOException {
 		this.exec = exec;
-		int sessionTimeout = 3000;
+        this.znode = znode;
+        int sessionTimeout = 3000;
 		zooKeeper = new ZooKeeper(LOCALHOST_ADDRESS + ":" + port, sessionTimeout, this);
 		dataMonitor = new DataMonitor(zooKeeper, znode, null, this);
 		dataMonitor.initChildrenGet();
@@ -27,6 +28,14 @@ class Executor implements Watcher, Runnable, DataMonitorListener {
 	public void process(WatchedEvent event) {
 		dataMonitor.process(event);
 	}
+
+    void ls() {
+        try {
+            dataMonitor.ls(znode);
+        } catch (Exception e) {
+            logger.error("Error while printing out znode");
+        }
+    }
 
 	public void run() {
 		try {

@@ -3,6 +3,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+import java.util.Scanner;
+
 public class Main {
 	public static void main(String[] args) {
 		loggerInit();
@@ -13,13 +15,25 @@ public class Main {
 		}
 		String hostPort = args[0];
 		String znode = "/znode_testowy";
-		String exec[] = new String[args.length - 2];
-		System.arraycopy(args, 2, exec, 0, exec.length);
-		try {
-			new Executor(hostPort, znode, exec).run();
-		} catch (Exception e) {
+        String exec[] = new String[args.length - 1];
+        System.arraycopy(args, 1, exec, 0, exec.length);
+        Executor executor = null;
+        try {
+            executor = new Executor(hostPort, znode, exec);
+            Thread thread = new Thread(executor);
+            thread.start();
+        } catch (Exception e) {
 			e.printStackTrace();
 		}
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String read = scanner.nextLine();
+            if (read.trim().toUpperCase().equals("LS")) {
+                executor.ls();
+            }
+        }
+
 	}
 
 	private static void loggerInit() {

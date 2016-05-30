@@ -32,7 +32,7 @@ class DataMonitor implements Watcher, StatCallback {
 		try {
 			zooKeeper.getChildren(znode, this);
 		} catch (Exception ex) {
-			logger.error("Error while getting children", ex);
+			logger.debug("Error while getting children", ex);
 		}
 	}
 
@@ -110,7 +110,7 @@ class DataMonitor implements Watcher, StatCallback {
 		initChildrenGet();
 	}
 
-	private void ls(String path) throws KeeperException, InterruptedException {
+	void ls(String path) throws KeeperException, InterruptedException {
 		try {
 			List<String> children = zooKeeper.getChildren(path, false);
 			for (String child : children) {
